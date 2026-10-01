@@ -46,3 +46,8 @@ a.co-link:hover .h3 { text-decoration-color: var(--ink); }
 .co-cat { font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--verde); }
 /* titoli delle schede articolo senza sottolineatura */
 a.co-link .h3, a.co-link:hover .h3 { text-decoration: none; }
+
+/* accenti: rosso su chiaro */
+.co-cat { color: var(--rosso); }
+.co-conferma { background: var(--rosso); }
+a.co-link .h3 { text-decoration-color: var(--rosso); }

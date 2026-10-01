@@ -61,3 +61,27 @@
 .ph.sd-foto { width: 64px; height: 64px; padding: 0; border-radius: 50%; overflow: hidden; }
 @media (min-width: 900px) { .ph.sd-foto { width: 80px; height: 80px; } }
 .sd-agente { align-items: center; }
+
+/* 2.7 Sedi: titolo e sottotitolo al centro, sotto solo le card */
+.sd-testa { text-align: center; }
+.sd-testa > h1, .sd-testa > .lead { margin-left: auto; margin-right: auto; text-wrap: balance; }
+.sd-testa + .ag-sedi { margin-top: var(--s5); }
+
+/* 2.11 Contatti */
+.ct-testa { text-align: center; }
+.ct-testa > h1, .ct-testa > .lead { margin-left: auto; margin-right: auto; text-wrap: balance; }
+.ct-testa + .ct-canali { margin-top: var(--s5); }
+.ct-canale { align-items: center; text-align: center; gap: var(--s1); padding: var(--s4) var(--s3); text-decoration: none; }
+.ct-ico { display: flex; align-items: center; justify-content: center; width: 64px; height: 64px; margin-bottom: var(--s1); border-radius: 50%; background: var(--rosso); color: var(--bianco); }
+.ct-et { font-size: 17px; line-height: 24px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2); }
+.ct-val { font-size: 26px; line-height: 32px; font-weight: 700; color: var(--ink); overflow-wrap: anywhere; text-decoration: underline; text-decoration-color: var(--rosso); text-decoration-thickness: 2px; text-underline-offset: 6px; }
+.ct-canale:hover .ct-val { text-decoration-color: var(--ink); }
+@media (max-width: 599px) { .ct-val { font-size: 24px; line-height: 30px; } }
+.ct-sede { gap: var(--s2); }
+.ct-sede h3 a { text-decoration: none; }
+.ct-righe { list-style: none; display: flex; flex-direction: column; gap: var(--s2); }
+.ct-righe li { display: flex; gap: var(--s1); align-items: flex-start; }
+.ct-righe svg { flex: 0 0 22px; margin-top: 4px; color: var(--rosso); }
+.ct-vai { display: inline-flex; align-items: center; min-height: 44px; margin-top: auto; font-weight: 700; }
+.ct-val.ct-mail { font-size: 20px; line-height: 28px; overflow-wrap: normal; }
+@media (min-width: 1200px) { .ct-val.ct-mail { font-size: 22px; line-height: 30px; } }

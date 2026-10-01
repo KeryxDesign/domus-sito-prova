@@ -4,6 +4,7 @@
   --verde: #1f7a33;   /* un verde solo in tutto il sito (deciso 01/10/2026): il #40bc52 del sito attuale scurito a stessa tinta. Bianco sopra 5,4:1, sul bianco come segno 5,4:1. Sul verde il testo e' bianco, mai --ink (3,0:1) */
   --verde-scuro: var(--verde); /* alias, stesso valore */
   --verde-sfumato: linear-gradient(135deg, #23843a 0%, #17652b 45%, #0b3f1a 100%); /* fondo delle sezioni verdi: dal verde chiaro al verde quasi nero, stessa tinta. Bianco sopra da 4,7:1 a 11:1 */
+  --giallo: #ffec94; /* voce attiva del menu in testa: sul verde 4,5:1 nel punto piu' chiaro della sfumatura */
   --rosso: #c0392b;   /* colore delle CTA (01/10/2026): bianco sopra 5,4:1. Solo pulsanti pieni, mai testo o fondi */
   --rosso-scuro: #9e2b20; /* passaggio del mouse sulla CTA */
   --ink: #0f2412;     /* verde-nero, stessa tinta del verde (129°), mai nero puro. Tutto il testo, contorno del focus, filetto sul verde: 16,4:1 sul bianco, 14,3:1 su #efefef, 6,7:1 sul verde */
@@ -552,3 +553,170 @@ html.a11y-moto *, html.a11y-moto *::before, html.a11y-moto *::after { animation:
 .pd-riga { display: flex; align-items: flex-start; gap: var(--s1); font-size: 16px; line-height: 22px; color: var(--bianco); }
 .pd-riga svg { flex: 0 0 20px; margin-top: 1px; }
 .pd a.pd-riga { min-height: 32px; align-items: center; }
+.pd a.pd-numero { font-size: 18px; font-weight: 700; }
+/* sezioni titolo + modulo: titolo sopra, modulo sotto, tutto al centro (01/10/2026) */
+.duo:has(> .modulo), .duo.pila:has(> .modulo) { grid-template-columns: minmax(0, 1fr) !important; grid-template-rows: none !important; justify-items: center; gap: var(--s4); text-align: center; }
+.duo:has(> .modulo) > * { grid-column: 1 !important; grid-row: auto !important; width: 100%; max-width: 46rem; }
+.duo:has(> .modulo) > .st:first-child { max-width: 40rem; }
+.duo:has(> .modulo) .modulo { align-items: center; text-align: center; }
+.duo:has(> .modulo) .modulo .campi { width: 100%; text-align: left; }
+.duo:has(> .modulo) .modulo .btn { align-self: center; }
+.duo:has(> .modulo) .modulo .small, .duo:has(> .modulo) .modulo p { margin-left: auto; margin-right: auto; }
+/* voce attiva nel menu in testa: testo giallo */
+.hd .nv a[aria-current="page"]:not(.hd-cta), .hd .nm > nav a[aria-current="page"]:not(.hd-cta), .hd .dd.attiva > .dd-cap, .hd .dd-m.attiva > summary { color: var(--giallo); }
+@media (min-width: 1180px) { .hd .nv a[aria-current="page"]:not(.hd-cta), .hd .dd.attiva > .dd-cap { border-bottom-color: var(--giallo); } }
+.hd .dd-menu a[aria-current="page"] { font-weight: 700; background: var(--tenue); }
+.hd .dd-m > div a[aria-current="page"] { color: var(--giallo); }
+.hd .nv .dd-menu a[aria-current="page"] { color: var(--ink); border-bottom: 0; }
+/* voce attiva anche nel piede: gialla sul verde, scura nella tendina bianca */
+.pd a[aria-current="page"], .pd .dd-pd.attiva > summary { color: var(--giallo); }
+@media (min-width: 900px) { .pd .dd-pd > div a[aria-current="page"] { color: var(--ink); font-weight: 700; } }
+/* Home, primo schermo: caratteri piu' grandi a ogni misura (01/10/2026) */
+.sz.hero.home .occhiello { font-size: 16px; line-height: 22px; }
+.sz.hero.home .h-home { font-size: 34px; line-height: 40px; letter-spacing: -0.01em; text-wrap: balance; }
+.sz.hero.home .lead { font-size: 20px; line-height: 30px; }
+@media (min-width: 600px) {
+  .sz.hero.home .occhiello { font-size: 17px; line-height: 24px; }
+  .sz.hero.home .h-home { font-size: 42px; line-height: 48px; }
+  .sz.hero.home .lead { font-size: 22px; line-height: 32px; }
+}
+@media (min-width: 900px) {
+  .sz.hero.home .occhiello { font-size: 18px; line-height: 26px; }
+  .sz.hero.home .h-home { font-size: 54px; line-height: 60px; }
+  .sz.hero.home .lead { font-size: 24px; line-height: 36px; }
+}
+@media (min-width: 1200px) {
+  .sz.hero.home .h-home { font-size: 62px; line-height: 68px; }
+  .sz.hero.home .lead { font-size: 26px; line-height: 38px; }
+}
+/* piede: titoli di colonna in giallo, numero unico come pulsante rosso */
+.pd .pd-tit { color: var(--giallo); }
+.pd a.pd-numero { display: inline-flex; align-self: flex-start; align-items: center; gap: var(--s1); min-height: 48px; padding: 0 var(--s3); background: var(--rosso); color: var(--bianco); border-radius: 4px; font-size: 18px; font-weight: 700; text-decoration: none; }
+.pd a.pd-numero:hover { background: var(--rosso-scuro); color: var(--bianco); text-decoration: none; }
+.pd a.pd-numero svg { margin-top: 0; }
+/* telefono: caratteri piu' grandi per lettori 40-50 anni (01/10/2026). Corpo 20, nessun testo sotto 16 */
+@media (max-width: 599px) {
+  body { font-size: 20px; line-height: 31px; }
+  h1 { font-size: 34px; line-height: 40px; }
+  h2, .sz h2 { font-size: 30px; line-height: 37px; }
+  h3, .h3 { font-size: 23px; line-height: 30px; }
+  .lead, .sz.hero.home .lead { font-size: 22px; line-height: 32px; }
+  .small, .ag-riga, .card p.small { font-size: 18px; line-height: 26px; }
+  .sz.hero.home .h-home { font-size: 36px; line-height: 42px; }
+  .occhiello, .sz.hero.home .occhiello { font-size: 17px; line-height: 24px; }
+  .btn { font-size: 20px; min-height: 56px; }
+  .sb .btn, .im-barra .btn { font-size: 18px; line-height: 22px; }
+  .trustbar li { font-size: 18px; line-height: 25px; }
+  .trustbar strong { font-size: 26px; line-height: 32px; }
+  .voce blockquote { font-size: 20px; line-height: 30px; }
+  .voce-nome { font-size: 19px; line-height: 26px; }
+  .voce-dove { font-size: 17px; line-height: 24px; }
+  .campo input, .campo select, .campo textarea { font-size: 20px; }
+  .acc > summary { font-size: 21px; line-height: 28px; }
+  .nm > nav a, .nm .dd-m { font-size: 22px; }
+  .nm .dd-m > div a { font-size: 20px; }
+  .pdn a, .pd-menu .dd-pd > summary { font-size: 19px; }
+  .pd-riga { font-size: 18px; line-height: 25px; }
+  .pd a.pd-sede-nome { font-size: 20px; }
+  .pd-tit { font-size: 18px; }
+  .pd-legale { font-size: 16px; line-height: 24px; }
+  .legal a { font-size: 18px; }
+  .co-meta { font-size: 16px; line-height: 22px; }
+  .tempo, .caso .tempo { font-size: 27px; line-height: 34px; }
+  .prezzo { font-size: 23px; line-height: 30px; }
+  .ph span { font-size: 17px; }
+  .fl-opz { font-size: 19px; min-height: 52px; }
+  .fl-reset { font-size: 18px; }
+  .sd-lista { font-size: 20px; }
+}
+/* tablet: un passo in piu' rispetto al desktop stretto */
+@media (min-width: 600px) and (max-width: 899px) {
+  body { font-size: 20px; line-height: 31px; }
+  .small { font-size: 18px; line-height: 26px; }
+  .trustbar li { font-size: 18px; line-height: 25px; }
+  .voce blockquote { font-size: 20px; line-height: 30px; }
+  .pd-riga { font-size: 17px; }
+  .pd-legale { font-size: 15px; line-height: 22px; }
+}
+/* Home: squadra piu' grande, la colonna della foto si allarga e la foto esce dal margine destro */
+@media (min-width: 600px) { .con-squadra .apertura { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); } }
+@media (min-width: 900px) { .con-squadra .apertura { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: var(--s3); } }
+.ph.scontornata { margin-right: calc(-1 * var(--m)); }
+.ph.scontornata > img { width: 112%; max-width: none; margin-left: -6%; }
+@media (min-width: 1200px) { .ph.scontornata > img { width: 118%; margin-left: -10%; } }
+/* al telefono la squadra torna visibile, sotto i bottoni, a tutta larghezza */
+@media (max-width: 599px) { .sz.hero.home .ph.scontornata { display: block; margin: 0 calc(-1 * var(--m)); } .ph.scontornata > img { width: 100%; margin-left: 0; } }
+/* correzione: niente scroll orizzontale, colonna del testo larga abbastanza tra 900 e 1199 */
+.sz.hero.home { overflow-x: clip; }
+.ph.scontornata > img { width: 100%; margin-left: 0; }
+@media (min-width: 900px) and (max-width: 1199px) {
+  .con-squadra .apertura { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .sz.hero.home .h-home { font-size: 46px; line-height: 52px; }
+}
+@media (min-width: 1200px) {
+  .con-squadra .apertura { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  .ph.scontornata > img { width: 108%; margin-left: -4%; }
+}
+/* Home al telefono: niente foto, caratteri piu' grandi (01/10/2026) */
+@media (max-width: 599px) {
+  .sz.hero.home .ph.scontornata { display: none; }
+  .sz.hero.home .h-home { font-size: 40px; line-height: 46px; }
+  .sz.hero.home .lead { font-size: 23px; line-height: 34px; }
+  .sz.hero.home .occhiello { font-size: 18px; line-height: 26px; }
+  .sz.hero.home .btn { font-size: 21px; min-height: 60px; }
+  .trustbar strong { font-size: 28px; line-height: 34px; }
+  .trustbar li { font-size: 19px; line-height: 26px; }
+  .trustbar .tb-ico { width: 30px; height: 30px; }
+}
+/* spaziature al telefono: piu' aria tra i blocchi e dentro le sezioni (01/10/2026) */
+@media (max-width: 599px) {
+  :root { --sez: 56px; --m: 20px; }
+  .sz.hero.home { padding-top: var(--s4); }
+  .con-squadra .apertura > .st { padding-bottom: 48px; }
+  .sz.hero.home .st > .occhiello + * { margin-top: 12px; }
+  .sz.hero.home .st > h1 + .lead { margin-top: 20px; }
+  .sz.hero.home .st > .lead + .azioni { margin-top: 32px; }
+  .sz.hero.home .azioni { gap: 12px; }
+  .sz.vs { padding: var(--s4) 0; }
+  .trustbar { gap: 28px var(--s2); }
+  .trustbar li { gap: 6px; }
+  .st > * + * { margin-top: 28px; }
+  .st > h1 + *, .st > h2 + * { margin-top: 16px; }
+  .grid { gap: 20px; }
+  .card { padding: 24px 20px; }
+  .card.foto > .corpo { padding: 20px 20px 24px; gap: 10px; }
+}
+/* trustbar: icone e numeri in giallo, descrizioni bianche */
+.sz.vs .trustbar .tb-ico, .sz.vs .trustbar strong { color: var(--giallo); }
+/* ACCENTI (01/10/2026): su fondo chiaro l'accento e' il rosso, su fondo verde il giallo. Il verde resta per fondi, icone di servizio e bottoni flottanti */
+a { text-decoration-color: var(--rosso); }
+a:hover { text-decoration-color: var(--ink); }
+.num, .acc > summary::after { background: var(--rosso); color: var(--bianco); }
+.lista > li::before { background: var(--rosso); }
+.caso, .card.porta { border-top-color: var(--rosso); }
+.citazione { border-left-color: var(--rosso); }
+.stelle { color: var(--rosso); }
+.campo input:focus, .campo select:focus, .campo textarea:focus { outline-color: var(--rosso); }
+.fl-reset, .leggi > summary, .card .vai, a.card :is(h2, h3, .h3) { text-decoration-color: var(--rosso); }
+.ilist > a:hover { text-decoration-color: var(--rosso); }
+.sd-lista svg { color: var(--rosso); }
+.fl-opz[aria-pressed="true"] { background: var(--rosso); }
+/* su fondo verde: accento giallo */
+.sz.v .fil, .sz.vs .fil { background: var(--giallo); }
+.sz.v a:not(.btn), .sz.vs a:not(.btn), .pd a:hover, .pd-sedi h3 a:hover { text-decoration-color: var(--giallo); }
+.sz.vs .stelle, .sz.v .stelle { color: var(--giallo); }
+@media (min-width: 1180px) { .nv a:hover { border-bottom-color: var(--giallo); } }
+.sz.v .lista > li::before { background: var(--giallo); }
+.sz.v :is(.card, .modulo, .pannello, .cerca, .passi > li) a:not(.btn) { text-decoration-color: var(--rosso); }
+.sz.v :is(.card, .passi > li) .stelle { color: var(--rosso); }
+.sz.v .modulo .campo :is(input, select, textarea):focus { outline-color: var(--rosso); }
+/* trustbar: giallo solo sulle icone; icona e descrizione partono dallo stesso margine sinistro */
+.sz.vs .trustbar strong { color: var(--bianco); }
+.trustbar li { align-items: flex-start; }
+.tb-num { margin-left: 0; padding-left: 0; }
+.trustbar .tb-ico { margin-left: -3px; } /* il tratto dell'icona parte 3px dentro il riquadro 24: si recupera per allinearlo al testo */
+/* trustbar: icona e numero +20% (01/10/2026) */
+.trustbar .tb-ico { width: 38px; height: 38px; margin-left: -4px; }
+.trustbar strong { font-size: 26px; line-height: 32px; }
+@media (min-width: 900px) { .trustbar strong { font-size: 31px; line-height: 38px; } }
+@media (max-width: 599px) { .trustbar .tb-ico { width: 36px; height: 36px; } .trustbar strong { font-size: 34px; line-height: 40px; } }
