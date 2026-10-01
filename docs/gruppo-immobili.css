@@ -1,0 +1,94 @@
+/* Domus Real Estate · gruppo immobili: SchedaImmobile, Comprare casa, Immobili in vendita, Scheda immobile, Agente */
+/* Si carica dopo struttura.css. Solo variabili della base: nessun colore e nessun carattere scritto a mano. */
+
+/* SchedaImmobile: la scheda d'annuncio. Prima il prezzo, poi il titolo, poi il comune.
+   La foto sta in 2:1: con i campi del gestionale la scheda resta dentro i 520 di riferimento a tre colonne,
+   e al telefono la prima scheda entra nel primo schermo. I dati e il piede stanno in fondo, alla stessa altezza in tutte le schede di una riga */
+.grid > .sc-host > .im-scheda { height: 100%; }
+#dc-root > .sc-host > .im-scheda { max-width: 400px; margin: var(--s3); }
+.im-scheda > .ph { flex: 0 0 auto; }
+.im-scheda dl, .im-scheda dd { margin: 0; }
+.im-prezzo { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: var(--s1); }
+.im-prezzo dt { font-size: 17px; line-height: 24px; color: var(--ink-2); }
+.im-scheda .prezzo { font-size: 24px; line-height: 30px; }
+.im-scheda h3 { font-size: 19px; line-height: 28px; }
+.im-zona { font-size: 17px; line-height: 24px; color: var(--ink-2); }
+/* tipologia e codice: una riga sola sotto il comune, alla sua stessa misura */
+.im-meta { display: flex; flex-wrap: wrap; column-gap: var(--s2); font-size: 17px; line-height: 24px; color: var(--ink-2); }
+.im-scheda .im-dati { margin-top: auto; }
+.im-etichetta { padding: 0 var(--s1); background: var(--tenue); border-radius: 4px; font-size: 17px; line-height: 32px; }
+.im-etichetta dt, .im-etichetta dd { display: inline; }
+.im-etichetta dt { color: var(--ink-2); }
+.im-etichetta dd { font-weight: 700; }
+.sz.b .im-etichetta { background: var(--bianco); }
+/* piede della scheda: a sinistra chi segue la casa, a destra il collegamento. Se non stanno in riga, il collegamento va sotto */
+.im-piede { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s1) var(--s2); }
+.im-agente { display: flex; align-items: center; gap: var(--s1); min-width: 0; font-size: 17px; line-height: 24px; }
+.im-cerchio { flex: 0 0 40px; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: var(--tenue); border: 1px solid var(--grigio); color: var(--ink-2); font-size: 15px; line-height: 1; font-weight: 700; }
+.sz.b .im-cerchio { background: var(--bianco); }
+
+/* 2.4 Immobili in vendita: i filtri. Al telefono chiusi dietro una barra, cosi' la prima scheda sta nel primo schermo; da 600 aperti */
+.im-filtri { position: relative; }
+.im-interruttore { position: absolute; top: 0; left: 0; z-index: 1; width: 100%; height: 56px; margin: 0; opacity: 0; cursor: pointer; }
+.im-barra-filtri { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); min-height: 56px; padding: var(--s1) var(--s1) var(--s1) var(--s3); background: var(--bianco); color: var(--ink); border: 2px solid var(--ink); border-radius: 4px; font-size: 19px; line-height: 24px; font-weight: 700; }
+.im-barra-filtri::after { content: "+"; flex: 0 0 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--verde); color: var(--ink); font-size: 26px; line-height: 1; }
+.im-interruttore:checked + .im-barra-filtri::after { content: "\2212"; }
+.im-interruttore:focus-visible + .im-barra-filtri { outline: 3px solid var(--ink); outline-offset: 3px; }
+.im-filtri > .im-campi { display: none; margin-top: var(--s2); }
+.im-interruttore:checked ~ .im-campi { display: grid; }
+@media (min-width: 600px) {
+  .im-interruttore, .im-barra-filtri { display: none; }
+  .im-filtri > .im-campi { display: grid; margin-top: 0; }
+}
+/* sei filtri: da 900 tre per riga, due righe pari invece di quattro piu' due */
+@media (min-width: 900px) { .cerca.im-f6 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+/* 2.5 Scheda immobile: cinque foto, la prima intera e quattro sotto. Al telefono scorrono di lato, e si vede il bordo della seguente */
+@media (min-width: 600px) { .galleria.im-galleria { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 599px) {
+  .im-striscia { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 88%; overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 calc(-1 * var(--m)); padding: 0 var(--m); scroll-padding: 0 var(--m); }
+  .im-striscia > * { scroll-snap-align: start; }
+  .im-striscia > .ph:first-child { grid-column: auto; }
+}
+/* i tre gesti: sotto 900 in una barra fissa in basso, sotto il pollice a ogni altezza della pagina; da 900 nel pannello */
+@media (max-width: 899px) {
+  .im-barra { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s1); padding: var(--s1) var(--s2); padding-bottom: calc(var(--s1) + env(safe-area-inset-bottom, 0px)); background: var(--bianco); border-top: 1px solid var(--grigio); }
+  .im-barra .btn { width: 100%; padding: var(--s1); }
+  .im-con-barra { padding-bottom: calc(56px + 2 * var(--s1) + 1px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (max-width: 599px) { .im-barra .btn { font-size: 17px; line-height: 20px; } }
+/* il prezzo nel pannello porta la sua etichetta sulla stessa riga */
+.pannello > .im-prezzo { margin: 0; }
+.pannello > .im-prezzo dd { margin: 0; }
+
+/* persone: niente volti. Un riquadro neutro con le iniziali, alla misura della foto che arrivera' */
+.im-iniziali { display: flex; align-items: center; justify-content: center; aspect-ratio: 1 / 1; background: var(--tenue); border: 1px solid var(--grigio); border-radius: 4px; color: var(--ink-2); font-size: 26px; line-height: 32px; font-weight: 700; }
+.sz.b .pannello .im-iniziali { background: var(--bianco); }
+.agente > .im-iniziali { flex: 0 0 96px; width: 96px; }
+
+/* 2.3 Comprare casa: quattro campi e il pulsante. Da 600 due per riga e il pulsante sotto, da 1100 tutto su una riga */
+@media (min-width: 600px) { .im-cerca4 > .btn { grid-column: 1 / -1; } }
+@media (min-width: 1100px) { .cerca.im-cerca4 { grid-template-columns: repeat(4, minmax(0, 1fr)) auto; } .im-cerca4 > .btn { grid-column: auto; } }
+
+/* 2.9 Agente: al telefono il riquadro sta accanto al nome, da 600 prende la misura della base */
+@media (max-width: 599px) { .im-persona { grid-template-columns: 96px minmax(0, 1fr); gap: var(--s2); align-items: start; } }
+.im-persona > .im-iniziali { width: 100%; }
+@media (min-width: 600px) { .im-persona > .im-iniziali { font-size: 38px; line-height: 44px; } }
+@media (min-width: 900px) { .im-persona > .im-iniziali { font-size: 46px; line-height: 52px; } }
+
+/* 2.4: il conteggio e' l'etichetta dei risultati, e sta attaccato alla griglia */
+.st > .im-conteggio + .grid { margin-top: var(--s3); }
+/* nessun risultato: il testo resta alla misura di lettura anche nel pannello largo */
+.im-vuoto > p { max-width: 34em; }
+/* e il pulsante resta alla misura del suo testo: da 600 il pannello e' largo quanto la pagina */
+@media (min-width: 600px) { .im-vuoto .azioni { align-items: flex-start; } .im-vuoto .btn { width: auto; } }
+/* 2.5: il collegamento alla privacy sotto il modulo resta un bersaglio da pollice */
+.im-privacy a { display: inline-flex; align-items: center; min-height: 44px; }
+/* 2.9: nella testa su fondo tenue il riquadro delle iniziali va sul bianco, se no sparisce nel fondo */
+.sz.g .im-persona > .im-iniziali { background: var(--bianco); }
+/* 2.9 contatti diretti, sul fondo forte: il telefono resta il primo gesto, gli altri due restano bianchi */
+.sz.v .im-contatti .btn.alt { background: var(--bianco); border-color: var(--ink); color: var(--ink); }
+.sz.v .im-contatti .btn.alt:hover { background: var(--ink); color: var(--bianco); }
+
+/* verde unico: segno + bianco sul verde */
+.im-barra-filtri::after { color: var(--bianco); }

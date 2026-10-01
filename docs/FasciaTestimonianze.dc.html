@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fascia testimonianze · Domus Real Estate</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,700;1,400;1,700&display=swap"><link rel="stylesheet" href="./struttura.css"></helmet>
+<section class="sz {{ fondo }}" data-blocco="C1"><div class="wrap st"><span class="fil" aria-hidden="true"></span><h2>Cosa dicono i nostri clienti</h2><div class="grid c3"><figure class="card voce"><span class="stelle" role="img" aria-label="5 stelle su 5"><span aria-hidden="true">★★★★★</span></span><blockquote><p>Ci hanno dato la valutazione scritta prima ancora di firmare qualcosa. Abbiamo deciso il prezzo con calma, e la casa è andata via in poche settimane.</p></blockquote><figcaption class="voce-testa"><span class="ph voce-foto"><img src="https://img.magnific.com/free-photo/portrait-smiling-woman-outdoors_23-2147907068.jpg" alt="" width="64" height="64" loading="lazy"><span>Foto</span></span><span class="voce-chi"><span class="voce-nome">Giulia R.</span><span class="voce-dove">Treviglio</span></span></figcaption></figure><figure class="card voce"><span class="stelle" role="img" aria-label="5 stelle su 5"><span aria-hidden="true">★★★★★</span></span><blockquote><p>Cercavamo da mesi. Ci hanno fatto vedere solo case nel nostro budget e nella zona che volevamo: alla terza visita abbiamo trovato.</p></blockquote><figcaption class="voce-testa"><span class="ph voce-foto"><img src="https://img.magnific.com/free-photo/portrait-modern-man_23-2147960990.jpg" alt="" width="64" height="64" loading="lazy"><span>Foto</span></span><span class="voce-chi"><span class="voce-nome">Elena e Paolo C.</span><span class="voce-dove">Collecchio</span></span></figcaption></figure><figure class="card voce"><span class="stelle" role="img" aria-label="5 stelle su 5"><span aria-hidden="true">★★★★★</span></span><blockquote><p>Dal primo incontro al rogito ci ha seguiti la stessa persona. Ogni documento ce l’hanno spiegato prima di chiederci di firmarlo.</p></blockquote><figcaption class="voce-testa"><span class="ph voce-foto"><img src="https://img.magnific.com/free-photo/portrait-smiley-woman_23-2148860584.jpg" alt="" width="64" height="64" loading="lazy"><span>Foto</span></span><span class="voce-chi"><span class="voce-nome">Stefano M.</span><span class="voce-dove">Treviglio</span></span></figcaption></figure></div></div></section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() { return { fondo: this.props.fondo || 'b' }; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,700;1,400;1,700&display=swap"><link rel="stylesheet" href="./struttura.css"><link rel="stylesheet" href="./gruppo-agenzia.css"><title>Mappa del sito · Domus Real Estate</title></helmet>
+<div class="pg" data-screen-label="2.20 Mappa del sito">
+<dc-import name="MenuInTesta" hint-size="100%,73px"></dc-import>
+<main>
+<section class="sz b hero" data-blocco="2.20"><div class="wrap st">
+  <h1>Mappa del sito</h1>
+  <p class="small">Per ogni pagina: dove porta e da dove ci si arriva. Menu in testa e piede sono su tutte le pagine e stanno in cima.</p>
+  <sc-if value="{{ caricamento }}" hint-placeholder-val="{{ false }}"><p>Lettura delle pagine…</p></sc-if>
+  <div style="display: grid; gap: 0;">
+    <sc-for list="{{ comuni }}" as="c" hint-placeholder-count="2">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 8px 24px; padding: 16px; border-top: 2px solid var(--verde); background: var(--tenue); margin-bottom: 8px;">
+        <h3 style="font-size: 21px; line-height: 28px;">{{ c.nome }}</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 17px; line-height: 24px;">
+          <span style="color: var(--ink-2); font-weight: 700;">Porta a</span>
+          <sc-for list="{{ c.esce }}" as="l" hint-placeholder-count="4"><a href="{{ l.ancora }}">{{ l.nome }}</a></sc-for>
+        </div>
+      </div>
+    </sc-for>
+    <sc-for list="{{ pagine }}" as="p" hint-placeholder-count="10">
+      <div id="{{ p.id }}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 8px 24px; padding: 16px 0; border-top: 1px solid var(--grigio);">
+        <h3 style="font-size: 21px; line-height: 28px;"><a href="{{ p.href }}">{{ p.nome }}</a></h3>
+        <div style="display: grid; gap: 8px; font-size: 17px; line-height: 24px;">
+          <div style="display: flex; flex-wrap: wrap; gap: 4px 16px;">
+            <span style="color: var(--ink-2); font-weight: 700;">Porta a</span>
+            <sc-for list="{{ p.esce }}" as="l" hint-placeholder-count="3"><a href="{{ l.ancora }}">{{ l.nome }}</a></sc-for>
+            <sc-if value="{{ p.esceVuoto }}" hint-placeholder-val="{{ false }}"><span style="color: var(--ink-2);">solo menu e piede</span></sc-if>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 4px 16px;">
+            <span style="color: var(--ink-2); font-weight: 700;">Ci arrivi da</span>
+            <sc-for list="{{ p.entra }}" as="l" hint-placeholder-count="3"><a href="{{ l.ancora }}">{{ l.nome }}</a></sc-for>
+            <sc-if value="{{ p.entraVuoto }}" hint-placeholder-val="{{ false }}"><span style="color: var(--ink-2);">solo menu e piede</span></sc-if>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</div></section>
+</main>
+<dc-import name="Piede" hint-size="100%,640px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { pagine: [], comuni: [], caricamento: true };
+  async componentDidMount() {
+    const COMUNI = { 'MenuInTesta.dc.html': 'Menu in testa', 'Piede.dc.html': 'Piede' };
+    const coda = ['2-01-home.dc.html', ...Object.keys(COMUNI)];
+    const visti = new Set(coda), info = {}, link = {};
+    while (coda.length) {
+      const f = coda.shift();
+      let t;
+      try { const r = await fetch(f); if (!r.ok) continue; t = await r.text(); } catch (e) { continue; }
+      const out = new Set();
+      for (const m of t.matchAll(/href="([^"#?:]+\.dc\.html)/g)) { if (m[1] !== f) out.add(m[1]); if (!visti.has(m[1])) { visti.add(m[1]); coda.push(m[1]); } }
+      for (const m of t.matchAll(/<dc-import[^>]*name="([^"]+)"/g)) { const c = m[1] + '.dc.html'; if (!visti.has(c)) { visti.add(c); coda.push(c); } }
+      link[f] = [...out];
+      const lab = t.match(/class="pg"[^>]*data-screen-label="([\d.]+) ([^"]+)"/);
+      if (lab && !f.startsWith('0-')) info[f] = { num: lab[1], nome: lab[1] + ' ' + lab[2] };
+    }
+    const id = f => 'p-' + f.replace('.dc.html', '');
+    const rif = f => ({ nome: info[f].nome, ancora: '#' + id(f) });
+    const k = n => n.split('.').map(x => x.padStart(3, '0')).join('.');
+    const ord = (a, b) => k(info[a].num).localeCompare(k(info[b].num)) || a.localeCompare(b);
+    const comuniSet = new Set(Object.keys(COMUNI).flatMap(c => link[c] || []));
+    const entra = {};
+    for (const f in link) if (!COMUNI[f]) for (const d of link[f]) if (info[d] && info[f]) (entra[d] = entra[d] || new Set()).add(f);
+    const pagine = Object.keys(info).sort(ord).map(f => {
+      const esce = (link[f] || []).filter(d => info[d] && !comuniSet.has(d)).sort(ord).map(rif);
+      const en = [...(entra[f] || [])].sort(ord).map(rif);
+      return { href: f, id: id(f), nome: info[f].nome, esce, entra: en, esceVuoto: !esce.length, entraVuoto: !en.length };
+    });
+    const comuni = Object.keys(COMUNI).map(c => ({ nome: COMUNI[c], esce: (link[c] || []).filter(d => info[d]).sort(ord).map(rif) }));
+    this.setState({ pagine, comuni, caricamento: false });
+  }
+  renderVals() { return { ...this.state }; }
+}
+</script>
+</body>
+</html>

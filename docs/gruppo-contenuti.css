@@ -1,0 +1,48 @@
+/* Domus Real Estate · gruppo contenuti, pagine 2.12-2.19 */
+/* Si collega DOPO struttura.css. Solo classi co-, solo variabili di struttura.css: nessun colore e nessun carattere scritto a mano. */
+
+/* briciola: il ritorno alla pagina madre, sopra il titolo (2.13, 2.14, 2.15) */
+.co-briciola { display: flex; flex-wrap: wrap; align-items: center; }
+.co-briciola a { display: inline-flex; align-items: center; min-height: 48px; font-size: 17px; line-height: 24px; font-weight: 700; }
+.st > .co-briciola + * { margin-top: var(--s1); }
+
+/* scheda che porta a un'altra pagina: tutta la scheda e' il collegamento (2.12).
+   Il titolo porta il segno dei collegamenti della base anche da fermo: sul telefono non si passa sopra a niente */
+a.co-link .h3 { text-decoration: underline; text-decoration-color: var(--verde); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+a.co-link:hover .h3 { text-decoration-color: var(--ink); }
+
+/* firma dell'articolo: riquadro con le iniziali, nome che porta all'agente, data (2.13). Si appoggia a .agente della base.
+   .agente > div della base prende anche il segnaposto (e' un div) e lo mette in colonna: qui torna in riga, scritta in basso come negli altri */
+.co-firma { align-items: center; }
+.co-firma > .ph { flex-basis: 64px; flex-direction: row; }
+.co-firma a { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* risorse gratuite: elenco (2.17). Sul telefono la copertina 3:4 sta sopra il testo:
+   accanto, la colonna del testo scendeva a circa 20 caratteri per riga. Da 600 torna accanto */
+.co-risorse { list-style: none; display: flex; flex-direction: column; gap: var(--gap); max-width: 46em; }
+.co-risorsa { gap: var(--s2); }
+.co-risorsa > .ph { width: 120px; padding: var(--s1); }
+.co-risorsa > div:not(.ph) { display: flex; flex-direction: column; gap: var(--s1); min-width: 0; }
+@media (min-width: 600px) { .co-risorsa { flex-direction: row; align-items: flex-start; gap: var(--s3); } .co-risorsa > .ph { flex: 0 0 120px; } }
+
+/* riga di consenso del modulo: il rimando a Privacy e cookie si tocca col pollice (2.17) */
+.co-consenso a { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* voce sospesa dentro un gruppo di domande: il riquadro e' .sospeso della base, qui solo la larghezza delle domande e lo stacco dall'ultima (2.15) */
+.co-voce-sospesa { max-width: 46em; margin-top: var(--s3); }
+
+/* Grazie: segno di conferma, cerchio verde con la spunta d'inchiostro, come i numeri dei passi (2.18) */
+.co-conferma { position: relative; display: block; width: 56px; height: 56px; border-radius: 50%; background: var(--verde); }
+.co-conferma::after { content: ""; position: absolute; left: 20px; top: 8px; width: 12px; height: 24px; border-right: 4px solid var(--ink); border-bottom: 4px solid var(--ink); transform: rotate(45deg); }
+
+/* privacy: la colonna vuota che aspetta il testo legale (2.19) */
+.co-legale { min-height: 360px; align-items: flex-start; }
+
+/* verde unico: spunta bianca sul verde */
+.co-conferma::after { border-right-color: var(--bianco); border-bottom-color: var(--bianco); }
+
+/* scheda articolo: categoria e tempo di lettura sopra il titolo (2.12) */
+.co-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s1) var(--s2); font-size: 15px; line-height: 20px; color: var(--ink-2); }
+.co-cat { font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--verde); }
+/* titoli delle schede articolo senza sottolineatura */
+a.co-link .h3, a.co-link:hover .h3 { text-decoration: none; }

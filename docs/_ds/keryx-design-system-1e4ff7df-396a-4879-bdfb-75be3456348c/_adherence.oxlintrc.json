@@ -1,0 +1,157 @@
+{
+  "plugins": [
+    "react",
+    "import"
+  ],
+  "rules": {
+    "react/forbid-elements": [
+      "warn",
+      {
+        "forbid": []
+      }
+    ],
+    "no-restricted-imports": [
+      "warn",
+      {
+        "patterns": []
+      }
+    ],
+    "no-restricted-syntax": [
+      "warn",
+      {
+        "selector": "Literal[value=/#[0-9a-fA-F]{3,8}\\b/]",
+        "message": "Raw hex color — use a design-system color token via var()."
+      },
+      {
+        "selector": "Literal[value=/\\b\\d+px\\b/]",
+        "message": "Raw px value — use a design-system spacing token via var()."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/index.js"
+      ],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    }
+  ],
+  "x-omelette": {
+    "components": {},
+    "tokens": [
+      "--background",
+      "--border",
+      "--card",
+      "--coral",
+      "--coral-hover",
+      "--cream",
+      "--cream-dark",
+      "--font-display",
+      "--font-mono",
+      "--font-sans",
+      "--font-serif",
+      "--foreground",
+      "--fs-body",
+      "--fs-body-l",
+      "--fs-h1",
+      "--fs-h1-lg",
+      "--fs-h2",
+      "--fs-h2-lg",
+      "--fs-h3",
+      "--fs-kicker",
+      "--fs-kicker-s",
+      "--fs-lead",
+      "--fs-stat",
+      "--gold",
+      "--gold-bg",
+      "--gold-dark",
+      "--gold-ink",
+      "--gradient-testimonials",
+      "--h-header",
+      "--kx-delay",
+      "--lh-body",
+      "--lh-stat",
+      "--lh-tight",
+      "--lh-title",
+      "--muted",
+      "--muted-foreground",
+      "--navy",
+      "--navy-dark",
+      "--primary",
+      "--primary-foreground",
+      "--radius",
+      "--radius-2xl",
+      "--radius-xl",
+      "--ring",
+      "--shadow-card",
+      "--shadow-elegant",
+      "--sky-blue",
+      "--sp-page-x",
+      "--sp-section-y",
+      "--sp-section-y-lg",
+      "--tracking-kicker",
+      "--w-page",
+      "--w-read",
+      "--w-wide"
+    ],
+    "tokenKinds": {
+      "--background": "other",
+      "--foreground": "other",
+      "--card": "other",
+      "--muted": "other",
+      "--muted-foreground": "other",
+      "--border": "other",
+      "--ring": "other",
+      "--navy": "other",
+      "--navy-dark": "other",
+      "--sky-blue": "other",
+      "--cream": "other",
+      "--cream-dark": "other",
+      "--coral": "other",
+      "--coral-hover": "other",
+      "--gold": "other",
+      "--gold-dark": "other",
+      "--gold-bg": "color",
+      "--gold-ink": "other",
+      "--primary": "color",
+      "--primary-foreground": "other",
+      "--shadow-elegant": "shadow",
+      "--shadow-card": "shadow",
+      "--gradient-testimonials": "color",
+      "--font-sans": "font",
+      "--font-display": "font",
+      "--font-serif": "font",
+      "--font-mono": "font",
+      "--fs-kicker": "spacing",
+      "--fs-kicker-s": "spacing",
+      "--fs-body": "spacing",
+      "--fs-body-l": "spacing",
+      "--fs-lead": "spacing",
+      "--fs-h3": "spacing",
+      "--fs-h2": "spacing",
+      "--fs-h2-lg": "spacing",
+      "--fs-h1": "spacing",
+      "--fs-h1-lg": "spacing",
+      "--fs-stat": "spacing",
+      "--lh-tight": "other",
+      "--lh-title": "other",
+      "--lh-body": "other",
+      "--lh-stat": "other",
+      "--tracking-kicker": "font",
+      "--radius": "radius",
+      "--radius-xl": "radius",
+      "--radius-2xl": "radius",
+      "--sp-page-x": "spacing",
+      "--sp-section-y": "spacing",
+      "--sp-section-y-lg": "spacing",
+      "--w-page": "spacing",
+      "--w-wide": "spacing",
+      "--w-read": "spacing",
+      "--h-header": "spacing",
+      "--kx-delay": "other"
+    },
+    "fontFamilies": []
+  }
+}

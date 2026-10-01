@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Immobili in vendita · Domus Real Estate</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,700;1,400;1,700&display=swap"><link rel="stylesheet" href="./struttura.css"><link rel="stylesheet" href="./gruppo-immobili.css"></helmet>
+<div class="pg" data-screen-label="2.4 Immobili in vendita" data-testo="TESTO DI PROVA">
+<dc-import name="MenuInTesta" hint-size="100%,73px"></dc-import>
+<main><section class="sz b hero" data-blocco="2.4 · 2 3"><div class="wrap st"><h1>Le case che abbiamo in vendita adesso</h1><p class="lead">Ogni casa ha un agente che la segue: nome e numero li trovate nella scheda.</p>
+<div class="im-filtri"><input class="im-interruttore" type="checkbox" id="im-filtri-apri" aria-controls="im-campi-filtri"><label class="im-barra-filtri" for="im-filtri-apri">Apertura filtri · 18</label>
+<form class="cerca im-campi im-f6" id="im-campi-filtri" role="search" action="2-04-immobili-in-vendita.dc.html" method="get">
+<label class="campo"><span class="campo-et">Comune</span><select name="comune"><option value="">Comune</option></select></label>
+<label class="campo"><span class="campo-et">Tipo di casa</span><select name="tipologia"><option value="">Tipo di casa</option></select></label>
+<label class="campo"><span class="campo-et">Prezzo massimo</span><input placeholder="Prezzo massimo" type="text" name="prezzo" inputmode="numeric" placeholder="Es. 000.000 euro"></label>
+<label class="campo"><span class="campo-et">Locali</span><select name="locali"><option value="">Locali</option></select></label>
+<label class="campo"><span class="campo-et">Superficie minima</span><input placeholder="Superficie minima" type="text" name="superficie" inputmode="numeric" placeholder="In metri quadri"></label>
+<label class="campo"><span class="campo-et">Ordinate per</span><select name="ordine"><option value="">Ordinate per</option></select></label>
+</form></div></div></section>
+<section class="sz g" data-blocco="2.4 · 4 5 6"><div class="wrap st"><p class="forte im-conteggio" role="status">00 case in vendita con questi filtri</p>
+<sc-if value="{{ conRisultati }}" hint-placeholder-val="{{ true }}"><div class="grid c3"><dc-import name="SchedaImmobile" n="1" hint-size="100%,520px"></dc-import><dc-import name="SchedaImmobile" n="2" hint-size="100%,520px"></dc-import><dc-import name="SchedaImmobile" n="3" hint-size="100%,520px"></dc-import><dc-import name="SchedaImmobile" n="4" hint-size="100%,520px"></dc-import><dc-import name="SchedaImmobile" n="5" hint-size="100%,520px"></dc-import><dc-import name="SchedaImmobile" n="6" hint-size="100%,520px"></dc-import></div></sc-if>
+<sc-if value="{{ senzaRisultati }}" hint-placeholder-val="{{ false }}"><div class="pannello im-vuoto" data-blocco="2.4 · 6"><h2>Con questi filtri non c'è niente</h2><p>Provate a togliere un filtro o ad alzare il prezzo massimo. Oppure fatevi richiamare da un agente della zona.</p><div class="azioni"><a class="btn" href="2-11-contatti.dc.html">Richiamatemi</a></div></div></sc-if>
+</div></section>
+<section class="sz b" data-blocco="2.4 · 7"><div class="wrap st"><div class="invito riga"><div class="st"><span class="fil" aria-hidden="true"></span><h2>Non trovate quello che cercate?</h2><p>Diteci comune e prezzo. Quando entra una casa così, vi chiamiamo.</p></div><div class="azioni"><a class="{{ classeAvviso }}" href="2-11-contatti.dc.html">Avvisatemi</a></div></div></div></section></main>
+<dc-import name="Piede" hint-size="100%,640px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"stato":{"editor":"enum","options":["risultati","nessun-risultato"],"default":"risultati","tsType":"string"}}'>
+class Component extends DCLogic {
+  renderVals() {
+    // lo stato vuoto del blocco 6 si vede scegliendo «nessun-risultato».
+    // Nello stato vuoto il gesto principale e' «Richiamatemi» nel pannello: il pulsante della fascia passa in secondo piano
+    const vuoto = (this.props.stato || 'risultati') === 'nessun-risultato';
+    return { conRisultati: !vuoto, senzaRisultati: vuoto, classeAvviso: vuoto ? 'btn alt' : 'btn' };
+  }
+}
+</script>
+</body>
+</html>

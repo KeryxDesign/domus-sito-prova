@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SchedaImmobile · Domus Real Estate</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,700;1,400;1,700&display=swap"><link rel="stylesheet" href="./struttura.css"><link rel="stylesheet" href="./gruppo-immobili.css"></helmet>
+<sc-if value="{{ esiste }}" hint-placeholder-val="{{ true }}"><a class="card foto im-scheda" href="{{ collegamento }}" data-testo="TESTO DI PROVA">
+<div class="ph r21" aria-hidden="true" data-campo="foto"><span>Foto · immobile · 2:1</span></div>
+<div class="corpo"><dl class="im-prezzo"><dt>Prezzo</dt><dd class="prezzo" data-campo="prezzo">{{ prezzo }}</dd></dl><h3 data-campo="titolo">{{ titolo }}</h3><p class="im-zona" data-campo="comune">{{ comune }}</p>
+<p class="im-meta"><span data-campo="tipologia">Tipologia · 20</span><span data-campo="codice">Codice · 10</span></p>
+<dl class="etichette im-dati"><div class="im-etichetta"><dt>Superficie</dt> <dd data-campo="superficie">{{ superficie }}</dd></div><div class="im-etichetta"><dt>Locali</dt> <dd data-campo="locali">{{ locali }}</dd></div><div class="im-etichetta"><dt>Bagni</dt> <dd data-campo="bagni">· 2</dd></div><div class="im-etichetta"><dt>Classe energetica</dt> <dd data-campo="classe-energetica">· 3</dd></div></dl>
+<div class="im-piede"><div class="im-agente"><span class="im-cerchio" aria-hidden="true" data-campo="agente-iniziali">AP</span><span data-campo="agente">Agente di prova</span></div><span class="vai">Apro la scheda</span></div></div>
+</a></sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"sede":{"editor":"enum","options":["rete","treviglio","martinengo","collecchio"],"default":"rete","tsType":"string"},"n":{"editor":"int","default":1,"min":1,"max":6,"step":1,"tsType":"number"},"titolo":{"editor":"text","default":"","tsType":"string"},"comune":{"editor":"text","default":"","tsType":"string"},"prezzo":{"editor":"text","default":"","tsType":"string"},"superficie":{"editor":"text","default":"","tsType":"string"},"locali":{"editor":"text","default":"","tsType":"string"},"collegamento":{"editor":"text","default":"","tsType":"string"}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    // Gli immobili di prova del file di MUSE (2.4, blocco 5). Dati finti: nessuna casa vera.
+    // La sede segue il comune: Treviglio 1 e 6, Martinengo 2 e 4, Collecchio 3 e 5. Con sede="rete" n va da 1 a 6.
+    // I campi che MUSE non ha scritto (tipologia, codice, bagni, classe energetica) restano nel markup come «Nome campo · capienza».
+    const elenco = [
+      { sede: 'treviglio', titolo: 'Immobile di prova 1, trilocale con terrazzo', comune: 'Treviglio', superficie: '95 mq', locali: '3' },
+      { sede: 'martinengo', titolo: 'Immobile di prova 2, bilocale con giardino', comune: 'Martinengo', superficie: '60 mq', locali: '2' },
+      { sede: 'collecchio', titolo: 'Immobile di prova 3, villa a schiera con box', comune: 'Collecchio', superficie: '160 mq', locali: '5' },
+      { sede: 'martinengo', titolo: 'Immobile di prova 4, quadrilocale al piano terra', comune: 'Romano di Lombardia', superficie: '120 mq', locali: '4' },
+      { sede: 'collecchio', titolo: 'Immobile di prova 5, casa indipendente da sistemare', comune: 'Noceto', superficie: '210 mq', locali: '6' },
+      { sede: 'treviglio', titolo: 'Immobile di prova 6, attico con due terrazzi', comune: "Rivolta d'Adda", superficie: '110 mq', locali: '3' }
+    ];
+    const sede = p.sede || 'rete';
+    const scelta = (sede === 'rete') ? elenco : elenco.filter(c => c.sede === sede);
+    let n = parseInt(p.n, 10); if (!(n >= 1)) n = 1;
+    // oltre il numero di case della sede la scheda non si disegna: meglio una casella vuota che una casa inventata
+    const c = scelta[n - 1];
+    if (!c) return { esiste: false, collegamento: '', titolo: '', prezzo: '', comune: '', superficie: '', locali: '' };
+    return {
+      esiste: true,
+      titolo: p.titolo || c.titolo,
+      comune: p.comune || c.comune,
+      prezzo: p.prezzo || '000.000 euro',
+      superficie: p.superficie || c.superficie,
+      locali: p.locali || c.locali,
+      collegamento: p.collegamento || '2-05-scheda-immobile.dc.html'
+    };
+  }
+}
+</script>
+</body>
+</html>
