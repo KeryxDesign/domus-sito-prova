@@ -720,3 +720,8 @@ a:hover { text-decoration-color: var(--ink); }
 .trustbar strong { font-size: 26px; line-height: 32px; }
 @media (min-width: 900px) { .trustbar strong { font-size: 31px; line-height: 38px; } }
 @media (max-width: 599px) { .trustbar .tb-ico { width: 36px; height: 36px; } .trustbar strong { font-size: 34px; line-height: 40px; } }
+/* Home: titolo lungo di Luana, massimo 4 righe (14/10/2026) */
+@media (max-width: 599px) { .sz.hero.home .h-home { font-size: 28px; line-height: 34px; } }
+@media (min-width: 600px) and (max-width: 899px) { .sz.hero.home .h-home { font-size: 26px; line-height: 32px; } }
+@media (min-width: 900px) { .sz.hero.home .h-home { font-size: 36px; line-height: 44px; } }
+@media (max-width: 370px) { .sz.hero.home .h-home { font-size: 26px; line-height: 32px; } }
