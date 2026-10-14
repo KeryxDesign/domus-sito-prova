@@ -42,10 +42,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
+      # I dati veri entrano solo dopo la verifica: serve la variabile del repo ONOFFICE_ATTIVO = si
       - run: node sync/genera.mjs
         env:
-          ONOFFICE_TOKEN: ${{ secrets.ONOFFICE_TOKEN }}
-          ONOFFICE_SECRET: ${{ secrets.ONOFFICE_SECRET }}
+          ONOFFICE_TOKEN: ${{ vars.ONOFFICE_ATTIVO == 'si' && secrets.ONOFFICE_TOKEN || '' }}
+          ONOFFICE_SECRET: ${{ vars.ONOFFICE_ATTIVO == 'si' && secrets.ONOFFICE_SECRET || '' }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with: { path: _site }

@@ -12,4 +12,6 @@ Comandi:
 - `node sync/genera.mjs --finti` per provare in locale; poi `cd _site && python3 -m http.server`.
 - `node sync/genera.mjs --verifica` stampa solo nomi dei campi, valori permessi delle liste e conteggi. Nessun record.
 
+Interruttore: la build usa i dati veri solo se la variabile del repo `ONOFFICE_ATTIVO` vale `si`. Si accende dopo la verifica.
+
 Chiavi: solo nei Secrets del repo `ONOFFICE_TOKEN` e `ONOFFICE_SECRET`. Non vanno mai scritte in file o log. Tutte le pagine hanno `noindex,nofollow`.
