@@ -9,7 +9,7 @@ Il sito pubblicato si costruisce da `docs/` più gli immobili letti da onOffice.
 - `sedi.json` collega il comune alla sede (regola provvisoria).
 
 Comandi:
-- In locale le chiavi stanno nel portachiavi macOS, servizio `domus-onoffice`, mai in un file: `security add-generic-password -s domus-onoffice -a ONOFFICE_TOKEN -w` (chiede il valore senza mostrarlo), poi lo stesso con `ONOFFICE_SECRET`.
+- In locale le chiavi vanno in `.env` alla radice (in .gitignore, mai nel repo), letto da solo dallo script.
 - `node sync/genera.mjs --finti` per provare in locale; poi `cd _site && python3 -m http.server`.
 - `node sync/genera.mjs --verifica` stampa solo nomi dei campi, valori permessi delle liste e conteggi. Nessun record.
 
