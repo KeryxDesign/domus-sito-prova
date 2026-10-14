@@ -9,6 +9,8 @@ import { fileURLToPath } from 'node:url';
 import * as oo from './onoffice.mjs';
 
 const RADICE = join(dirname(fileURLToPath(import.meta.url)), '..');
+// In locale le chiavi stanno in .env (mai nel repo, è in .gitignore). Nell'Action arrivano dai Secrets.
+if (existsSync(join(RADICE, '.env'))) process.loadEnvFile(join(RADICE, '.env'));
 const SORGENTE = join(RADICE, 'docs');
 const USCITA = join(RADICE, '_site');
 const json = f => JSON.parse(readFileSync(join(RADICE, 'sync', f), 'utf8'));
