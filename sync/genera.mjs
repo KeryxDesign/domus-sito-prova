@@ -76,11 +76,16 @@ async function daOnOffice(cred) {
   const attivi = rec.filter(r => String(r.elements?.verkauft ?? '0') !== '1');
   const ids = attivi.map(r => r.id);
   const [fotoPer, agPer] = await Promise.all([oo.foto(cred, ids), oo.agenti(cred, ids)]);
+  // Le liste arrivano come chiavi tedesche: l'etichetta italiana sta nella configurazione dei campi (labels, ITA).
+  const voce = (campo, v) => disponibili[campo]?.permittedvalues?.[v] ?? etichetta(v);
   return attivi.map(r => {
     const e = r.elements ?? {};
+    const tipologia = e.objekttyp ? voce('objekttyp', e.objekttyp) : voce('objektart', e.objektart);
+    // Il titolo spesso manca nel gestionale: si ripiega su «Tipologia a Comune».
+    const titolo = e.objekttitel || [tipologia, e.ort].filter(Boolean).join(' a ') || 'Immobile';
     return {
-      id: String(r.id), titolo: e.objekttitel || 'Immobile', comune: e.ort, prezzo: e.kaufpreis,
-      tipologia: etichetta(e.objekttyp || e.objektart), codice: e.objektnr_extern, superficie: e.wohnflaeche,
+      id: String(r.id), titolo, comune: e.ort, prezzo: e.kaufpreis,
+      tipologia, codice: e.objektnr_extern, superficie: e.wohnflaeche,
       locali: e.anzahl_zimmer, bagni: e.anzahl_badezimmer, classe: e.energyClass, piano: e.etage,
       descrizione: e.objektbeschreibung, agente: agPer[String(r.id)] ?? null, foto: fotoPer[String(r.id)] ?? []
     };
