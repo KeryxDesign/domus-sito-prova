@@ -3,35 +3,35 @@
 (function () {
   var DOC = 'https://docs.google.com/document/d/';
   var CARTELLA = 'https://drive.google.com/drive/folders/1j3zdTH8qi08LE9fL5U8iCRB4SaclpfAJ';
-  var COMUNI = '1sUtutqtQAc2a-sIdzXFW2XdPpKMtOgr5Uqb31FeJv2U';
+  var COMUNI = '1N7V-7j3SnAi2i3gj1cnkzIr6v8HK6ecV8gUP1Km8yHM';
   var PAGINE = {
-    '0-indice': '1K_ap41D4tpH62Q8hK35bqucUe1CaiCuehjaGAujOgG4',
-    '2-01-home': '1ka2HqOLiO1EDASyu8pjMVl2AfDburziLxYRd6MQSH_E',
-    '2-02-vendere-casa': '1a6aRZKwADb-P2oq4DR7VHymHVyUFJdH3ieCI7dnfAPk',
-    '2-03-comprare-casa': '15E-V_uSjSyQG4EGY7xetlexovAiirSZ7Tiw7DQWETTE',
-    '2-04-immobili-in-vendita': '1-UkVXRCFZDR4HI9NOX4GcmlnVvELleZiQvPnyeW-uvk',
-    '2-05-scheda-immobile': '1ZWX2pUWfzqiFoS8cPRJ2RgbZ2rBEs7lrgYWbSHTN5k4',
-    '2-06-chi-siamo': '1PuHn0oT1CTlQ_tjq3XOg-yVoLXCiESq3HVWg87TfeLc',
-    '2-07-sedi': '1TI-Ix8gahdsF3elJsrN1oTQ1RLFkdaF581LFAtb-17s',
-    '2-08-sede-collecchio': '1UkNXSYkubi4QzLf8yTvrPYaHvTPj5Jjd7662oxZY7QA',
-    '2-08-sede-martinengo': '1H-uN6KKqOJy1woV1QnTlHMbXPSKky4QKybRh2yWvqJI',
-    '2-08-sede-treviglio': '1eOdKD8B4yI4gdx3YkJOtQitAGgr3NxtJ1Y-uA1ro8qI',
-    '2-09-agente': '11JJVGiy1LihxSHaTf28Pa9fkO-TAUnvmBeIXLakABt8',
-    '2-10-lavora-con-noi': '1PeVUec-vZw48kVmBCTYbmn6j3meu2xyLCnDrTF9WJ1U',
-    '2-11-contatti': '1OYQD8LatL2BAz3RgLYINxrlowMaKJhOqgeeMSKlmK4I',
-    '2-12-approfondimenti': '1Dj_BqGZbHJ3FlU-NufGL4wkS-AsMB_p-0_y3pCT1GbQ',
-    '2-13-articolo': '1CRTazLcE8FfNGveDSTykiSra0wumXXvUgZGBhNIqNHE',
-    '2-14-metodo': '1elyQ1wuj9KD6pMcf39OTuxboaHyP8NP28USnLJJOazc',
-    '2-15-domande-e-risposte': '1EdlVs83KL7CQRakqpevjsYMSwY-kdHpWdhwVWL2W4I8',
-    '2-16-testimonianze': '1dOWGN1jnZvTp-f6HN6OovYWFjbrlg8G4ROEvDQ9hDYU',
-    '2-17-risorse-gratuite': '1546yfx0eZ90s0ngX2weQmCgMEpdCFuCACAdTeC0SPW4',
-    '2-18-grazie-candidatura': '1cOqIZValyWSfvp2cj5-dwbdTUJ1X_2yf-cvr6GHHHGs',
-    '2-18-grazie-contatto': '1Qr-po21umFOumQaOiQb18vEdbw-wiDsdaJj8ruCEEFY',
-    '2-18-grazie-immobile': '1V2Aej7qbfyUFZDa99gJVQeo1JEvbUvrjf2kb3GLCiWQ',
-    '2-18-grazie-risorsa': '1ItYcdK9T-V6nmQvW843ajtMYKC6QdsN0oYjoloPZLic',
-    '2-18-grazie-valutazione': '1seNvAu1kZXL6Uujr5h4v9ZoO5uUofN5AQXfHmR8Mudg',
-    '2-19-privacy-e-cookie': '1d_vJQDZlFH08Hm17MBluhVL84w_56r4AbO2dqbQ8XvI',
-    '2-20-mappa-del-sito': '1aEaKqLFRkGmxMHT7BOPfdchyfkz-lEDV7fGg1pPnu2I'
+    '0-indice': '1PbtV4LrFcESdM3KvzISymZzV0_WskvlrQolyPvjKXpw',
+    '2-01-home': '1YrP8B7AjjUHuuLJSGvfkr5zwcui7Gf429WxbpJMnc5Y',
+    '2-02-vendere-casa': '1yhqIjprukrHe3HQBhhRkSLZ3ipidj-kkq4TCcfpbwhc',
+    '2-03-comprare-casa': '1dT7OitJ-4HtYl_6wpwYURGR_WY6Ogziuet2sSb35lvY',
+    '2-04-immobili-in-vendita': '1tO9YXhrsxbfygXeR1jMppRnTd40W9wnvI0dkqhxYMuE',
+    '2-05-scheda-immobile': '1075aERvcyLwDKd_2vOhe2V4-DALzu60zy4ncTr3YxSY',
+    '2-06-chi-siamo': '13fr80OrFnW4ccWoXL3tZWeI2aBZdK93QdHI8Mri5wgk',
+    '2-07-sedi': '14eazHxn2McS2gPSkLt9R_e0kOtglPsbthiUnqTisEtQ',
+    '2-08-sede-collecchio': '1F_U6r8zKAnsem_Rzj_eAA6MWkUkjat03D-F2vJhk7lQ',
+    '2-08-sede-martinengo': '1a2yk6MOWGbPreI7yZbgB_pyRdezRcgKmDzuxrE65uV4',
+    '2-08-sede-treviglio': '1p6kGv2w4bP1KL0lXtXaCfqETJOvNDYHxNx9Jj86ovJA',
+    '2-09-agente': '13zRODi3AiLcZ-gTHCC-WD_hOv0Et6uZn22evdMyQvbs',
+    '2-10-lavora-con-noi': '1d6QNcTUp9ujiy31_yeoczLT1LIIlWF8lS6NB6zOiXRU',
+    '2-11-contatti': '1IEclUZLqmFNYliGAiavQSpNDX1xIBGvmlmMuZdnwh0w',
+    '2-12-approfondimenti': '1fJyZB0t6bVGWjv7x38mm9hGSxE7WbLHuZihuXFFrsC8',
+    '2-13-articolo': '167o4nw4F99HCbpfpM_efcDcyPsx7KWEUF5GdnJ4vc9g',
+    '2-14-metodo': '1UvhDf7_WGQJnsUjc_nG3HRkBaTxV_tzVSws8fp3wcXU',
+    '2-15-domande-e-risposte': '1af__XAjzQ9bD-GpegqYmFw0a78lXDEnBcSkaX1zbjxY',
+    '2-16-testimonianze': '1f6GnQ95dBJaSK8g-ehCHJnDqye9PQTeSxiquuzjvBVA',
+    '2-17-risorse-gratuite': '1KhTZGQNfpUnFL8RgPN8zPXKc7Jzo30PHNvJReUP4KyI',
+    '2-18-grazie-candidatura': '1bXjudO29VOxMa8fgit3vO07ldkF__JQqeI-YVN5_FFw',
+    '2-18-grazie-contatto': '1rkGj5oW9nb9joB23A90MfRyB8MvhljLqqxiLI7lJZLk',
+    '2-18-grazie-immobile': '1MoQBJjh-ijsn9mGzLHlRcCvU6msZ6iWI4P2n52S6uec',
+    '2-18-grazie-risorsa': '1ywwVqQo7FGdulCzZSwAk1pugstXUzIOiZv2Ys9AHRxc',
+    '2-18-grazie-valutazione': '1HymB8lJR_nVTp79JVCRt3qnccSqREgUYftQ_L28cjwk',
+    '2-19-privacy-e-cookie': '14UKTtSgU-y_Uo0X4QxMc7XmcTciRdEHyZjHID8wkWTQ',
+    '2-20-mappa-del-sito': '1tk3wxdiDQ6Xx5gJodbggtblKlB_Mk_LvSnPIVi8yGds'
   };
 
   function link(testo, href) {
