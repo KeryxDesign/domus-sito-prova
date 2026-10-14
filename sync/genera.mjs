@@ -6,11 +6,18 @@
 import { readFileSync, writeFileSync, rmSync, cpSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 import * as oo from './onoffice.mjs';
 
 const RADICE = join(dirname(fileURLToPath(import.meta.url)), '..');
-// In locale le chiavi stanno in .env (mai nel repo, è in .gitignore). Nell'Action arrivano dai Secrets.
-if (existsSync(join(RADICE, '.env'))) process.loadEnvFile(join(RADICE, '.env'));
+// Nell'Action le chiavi arrivano dai Secrets. In locale si leggono dal portachiavi macOS (servizio domus-onoffice), mai da un file.
+for (const nome of ['ONOFFICE_TOKEN', 'ONOFFICE_SECRET']) {
+  if (process.env[nome] || process.platform !== 'darwin') continue;
+  try {
+    process.env[nome] = execFileSync('security', ['find-generic-password', '-s', 'domus-onoffice', '-a', nome, '-w'],
+      { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+  } catch { /* non c'è: si usano i dati finti */ }
+}
 const SORGENTE = join(RADICE, 'docs');
 const USCITA = join(RADICE, '_site');
 const json = f => JSON.parse(readFileSync(join(RADICE, 'sync', f), 'utf8'));
