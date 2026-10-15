@@ -152,7 +152,7 @@ function paginaImmobile(modello, e, n, tutti, agenti) {
   s = sostituisci(s, /<div class="desc">[\s\S]*?<\/details><\/div>/, desc, 'descrizione');
   const fotoAg = a.foto ? `<img src="${esc(a.foto)}" alt="${esc(a.nome)}" loading="lazy">` : `<span class="im-cerchio" aria-hidden="true">${esc(iniziali(a.nome))}</span>`;
   s = sostituisci(s, /<div class="im-agente-casa card">[\s\S]*?<\/section>/,
-    `<div class="im-agente-casa card"><div class="ph im-agente-foto">${fotoAg}</div><div class="im-agente-testo"><p class="h3">${esc(a.nome)}</p><p class="small">${esc(a.ruolo)}</p><p>Vi richiama per fissare giorno e ora della visita. In visita potete chiedere tutto, anche quello che nell’annuncio non c’è.</p><div class="azioni"><a class="btn" href="${wa}">Scrivi all’agente</a>${tel}<a class="btn alt" href="${esc(a.pagina)}">Apri la sua pagina</a></div></div></div></div></section>`, 'riquadro agente');
+    `<div class="im-agente-casa card"><div class="ph im-agente-foto">${fotoAg}</div><div class="im-agente-testo"><p class="h3">${esc(a.nome)}</p><p class="small">${esc(a.ruolo)}</p><p>Ti richiama per fissare giorno e ora della visita. In visita puoi chiedere tutto, anche quello che nell’annuncio non c’è.</p><div class="azioni"><a class="btn" href="${wa}">Scrivi all’agente</a>${tel}<a class="btn alt" href="${esc(a.pagina)}">Apri la sua pagina</a></div></div></div></div></section>`, 'riquadro agente');
   s = simili.length ? sostituisci(s, griglia, `<div class="grid c3">${imports(simili)}</div>`, 'case simili')
     : sostituisci(s, /<section class="sz b" data-blocco="2\.5 · 10">[\s\S]*?<\/section>/, '', 'case simili');
   return s;
