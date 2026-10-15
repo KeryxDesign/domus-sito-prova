@@ -25,7 +25,7 @@ const LISTE_DA_VERIFICARE = ['energyClass', 'objekttyp', 'objektart', 'heizungsa
 // ---------- utilità ----------
 const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const num = v => { const n = parseFloat(v); return Number.isFinite(n) ? n : null; };
-const euro = v => num(v) ? Math.round(num(v)).toLocaleString('it-IT').replace(/,/g, '.') + ' euro' : 'Prezzo su richiesta';
+const euro = v => num(v) ? String(Math.round(num(v))).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' euro' : 'Prezzo su richiesta';
 const mq = v => num(v) ? `${Math.round(num(v))} mq` : '';
 // 0 in onOffice vuol dire campo non compilato: lo trattiamo come vuoto e la riga non si mostra
 const pos = v => num(v) > 0 ? num(v) : null;
@@ -134,7 +134,7 @@ const griglia = /<div class="grid c3">(?:<dc-import name="SchedaImmobile"[^>]*><
 function paginaImmobile(modello, e, n, tutti, agenti) {
   const a = profilo(agenti, e.agente);
   const titolo = e.titolo + (e.comune && !e.titolo.includes(e.comune) ? ` a ${e.comune}` : '');
-  const foto = (e.foto ?? []).slice(0, 5);
+  const foto = (e.foto ?? []).slice(0, 40);
   const paragrafi = String(e.descrizione ?? '').split(/\n\s*\n|\r\n\s*\r\n/).map(p => p.trim()).filter(Boolean);
   const wa = a.whatsapp ? `https://wa.me/${esc(a.whatsapp)}` : '2-11-contatti.dc.html';
   const tel = a.whatsapp ? `<a class="btn alt" href="tel:+${esc(a.whatsapp)}">Chiama</a>` : '';
@@ -148,9 +148,14 @@ function paginaImmobile(modello, e, n, tutti, agenti) {
   s = sostituisci(s, /<title>[^<]*<\/title>/, `<title>${esc(e.titolo)} · Domus Real Estate</title>`, 'title');
   s = sostituisci(s, /<h1>[^<]*<\/h1>/, `<h1>${esc(titolo)}</h1>`, 'h1');
   s = sostituisci(s, /(<div class="gal galleria im-galleria im-striscia">)[\s\S]*?(<\/div>\s*)(<div class="pan pannello lato">)/,
-    (_, a1, a2, a3) => a1 + foto.map((u, i) => `<div class="ph r43"><img src="${esc(u)}" alt="Foto ${i + 1} di ${foto.length} dell’immobile" loading="${i ? 'lazy' : 'eager'}"></div>`).join('') + a2 + a3, 'galleria');
+    (_, a1, a2, a3) => a1 + foto.map((u, i) => {
+      // come i portali: una grande e due piccole, sull'ultima quante foto restano; tutte si aprono nel visore
+      const extra = i === 0 && foto.length > 1 ? ` data-conta="${foto.length} foto"` : i === 2 && foto.length > 3 ? ` data-altre="+${foto.length - 3} foto"` : '';
+      return `<div class="ph r43"${extra}><img src="${esc(u)}" alt="Foto ${i + 1} di ${foto.length} dell’immobile" loading="${i ? 'lazy' : 'eager'}"></div>`;
+    }).join('') + a2 + a3, 'galleria');
+  s = sostituisci(s, /<script src="\.\/testi-luana\.js" defer><\/script>/, m => `${m}\n<script src="./galleria-immobile.js" defer></script>`, 'script del visore');
   s = sostituisci(s, /<dd class="prezzo grande">[^<]*<\/dd>/, `<dd class="prezzo grande">${esc(euro(e.prezzo))}</dd>`, 'prezzo');
-  const dati = [['Comune', e.comune, 'comune'], ['Superficie', mq(e.superficie), 'superficie'], ['Locali', intero(e.locali), 'locali'], ['Bagni', intero(e.bagni), 'bagni'], ['Piano', piano(e.piano), 'piano'], ['Classe energetica', e.classe, 'classe']]
+  const dati = [['Comune', e.comune, 'comune'], ['Superficie', mq(e.superficie), 'superficie'], ['Prezzo al mq', pos(e.prezzo) && pos(e.superficie) ? euro(pos(e.prezzo) / pos(e.superficie)) : '', 'eurmq'], ['Locali', intero(e.locali), 'locali'], ['Bagni', intero(e.bagni), 'bagni'], ['Piano', piano(e.piano), 'piano'], ['Classe energetica', e.classe, 'classe']]
     .filter(([, v]) => v).map(([k, v, ico]) => `<div data-ico="${ico}"><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('');
   s = sostituisci(s, /<dl class="dati">[\s\S]*?<\/dl>/, `<dl class="dati">${dati}</dl>`, 'dati');
   s = sostituisci(s, /<div class="azioni im-barra">[\s\S]*?<\/div>/, `<div class="azioni im-barra"><a class="btn" href="${wa}">Scrivi all’agente</a><a class="btn alt" href="${mail}">Scrivi una mail</a></div>`, 'pulsanti');

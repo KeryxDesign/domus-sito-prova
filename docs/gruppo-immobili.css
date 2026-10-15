@@ -43,8 +43,33 @@
 /* sei filtri: da 900 tre per riga, due righe pari invece di quattro piu' due */
 @media (min-width: 900px) { .cerca.im-f6 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
-/* 2.5 Scheda immobile: cinque foto, la prima intera e quattro sotto. Al telefono scorrono di lato, e si vede il bordo della seguente */
-@media (min-width: 600px) { .galleria.im-galleria { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+/* 2.5 Scheda immobile: da 600 una foto grande e due piccole, come sui portali; sull'ultima piccola quante foto restano. Al telefono scorrono tutte di lato, e si vede il bordo della seguente. Un clic apre il visore (galleria-immobile.js) */
+@media (min-width: 600px) {
+  .galleria.im-galleria { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s1); }
+  .galleria.im-galleria > .ph:first-child { grid-column: 1 / span 2; grid-row: span 2; }
+  .galleria.im-galleria > .ph:not(:first-child) { aspect-ratio: auto; min-height: 0; }
+  .galleria.im-galleria > .ph:nth-child(n+4) { display: none; }
+  .galleria.im-galleria > .ph:nth-child(2):last-child { grid-row: span 2; }
+  .galleria.im-galleria:has(> .ph:only-child) { grid-template-columns: minmax(0, 1fr); }
+  .galleria.im-galleria:has(> .ph:only-child) > .ph { grid-column: auto; grid-row: auto; }
+  .im-galleria .ph[data-altre]::after { content: attr(data-altre); position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgb(0 0 0 / .5); color: var(--bianco); font-size: 22px; font-weight: 700; }
+}
+.im-galleria .ph:has(> img) { cursor: zoom-in; }
+.im-galleria .ph[data-conta]::after { content: attr(data-conta); position: absolute; right: var(--s1); bottom: var(--s1); padding: 2px 10px; border-radius: 999px; background: rgb(0 0 0 / .65); color: var(--bianco); font-size: 15px; line-height: 22px; }
+.im-galleria .ph:focus-visible { outline: 3px solid var(--verde); outline-offset: 2px; }
+/* visore a schermo intero */
+.im-visore { width: 100vw; height: 100vh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgb(0 0 0 / .96); color: var(--bianco); }
+.im-visore[open] { display: flex; align-items: center; justify-content: center; }
+.im-visore::backdrop { background: rgb(0 0 0 / .6); }
+.im-visore img { max-width: calc(100vw - 32px); max-height: calc(100vh - 120px); object-fit: contain; }
+.im-visore button { position: absolute; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border: 0; border-radius: 50%; background: rgb(255 255 255 / .15); color: var(--bianco); font-size: 34px; line-height: 1; cursor: pointer; }
+.im-visore button:hover, .im-visore button:focus-visible { background: rgb(255 255 255 / .3); }
+.im-v-chiudi { top: var(--s2); right: var(--s2); }
+.im-v-prec { left: var(--s2); top: 50%; transform: translateY(-50%); }
+.im-v-succ { right: var(--s2); top: 50%; transform: translateY(-50%); }
+.im-v-conta { position: absolute; bottom: var(--s2); left: 0; right: 0; margin: 0; text-align: center; font-size: 17px; }
+@media (max-width: 599px) { .im-v-prec, .im-v-succ { top: auto; bottom: var(--s1); transform: none; } }
+[data-ico="eurmq"] { --ico: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M17%206.5A6.5%206.5%200%201%200%2017%2017.5%22%2F%3E%3Cpath%20d%3D%22M4%2010h9M4%2014h9%22%2F%3E%3C%2Fsvg%3E"); }
 @media (max-width: 599px) {
   .im-striscia { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 88%; overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 calc(-1 * var(--m)); padding: 0 var(--m); scroll-padding: 0 var(--m); }
   .im-striscia > * { scroll-snap-align: start; }
