@@ -130,6 +130,7 @@ function paginaImmobile(modello, e, n, tutti, agenti) {
   const foto = (e.foto ?? []).slice(0, 5);
   const paragrafi = String(e.descrizione ?? '').split(/\n\s*\n|\r\n\s*\r\n/).map(p => p.trim()).filter(Boolean);
   const wa = a.whatsapp ? `https://wa.me/${esc(a.whatsapp)}` : '2-11-contatti.dc.html';
+  const tel = a.whatsapp ? `<a class="btn alt" href="tel:+${esc(a.whatsapp)}">Chiama</a>` : '';
   const mail = `mailto:${esc(a.email || 'info@domusrealestate.it')}?subject=${encodeURIComponent(e.titolo)}`;
   // case simili: stessa sede o tipologia, poi le più vicine di prezzo
   const simili = tutti.map((x, i) => ({ x, n: i + 1 })).filter(o => o.n !== n)
@@ -151,7 +152,7 @@ function paginaImmobile(modello, e, n, tutti, agenti) {
   s = sostituisci(s, /<div class="desc">[\s\S]*?<\/details><\/div>/, desc, 'descrizione');
   const fotoAg = a.foto ? `<img src="${esc(a.foto)}" alt="${esc(a.nome)}" loading="lazy">` : `<span class="im-cerchio" aria-hidden="true">${esc(iniziali(a.nome))}</span>`;
   s = sostituisci(s, /<div class="im-agente-casa card">[\s\S]*?<\/section>/,
-    `<div class="im-agente-casa card"><div class="ph im-agente-foto">${fotoAg}</div><div class="im-agente-testo"><p class="h3">${esc(a.nome)}</p><p class="small">${esc(a.ruolo)}</p><p>Vi richiama per fissare giorno e ora della visita. In visita potete chiedere tutto, anche quello che nell’annuncio non c’è.</p><div class="azioni"><a class="btn" href="${wa}">Scrivi all’agente</a><a class="btn alt" href="${esc(a.pagina)}">Apri la sua pagina</a></div></div></div></div></section>`, 'riquadro agente');
+    `<div class="im-agente-casa card"><div class="ph im-agente-foto">${fotoAg}</div><div class="im-agente-testo"><p class="h3">${esc(a.nome)}</p><p class="small">${esc(a.ruolo)}</p><p>Vi richiama per fissare giorno e ora della visita. In visita potete chiedere tutto, anche quello che nell’annuncio non c’è.</p><div class="azioni"><a class="btn" href="${wa}">Scrivi all’agente</a>${tel}<a class="btn alt" href="${esc(a.pagina)}">Apri la sua pagina</a></div></div></div></div></section>`, 'riquadro agente');
   s = simili.length ? sostituisci(s, griglia, `<div class="grid c3">${imports(simili)}</div>`, 'case simili')
     : sostituisci(s, /<section class="sz b" data-blocco="2\.5 · 10">[\s\S]*?<\/section>/, '', 'case simili');
   return s;
@@ -183,6 +184,10 @@ async function main() {
   lista = sostituisci(lista, griglia, `<div class="grid c3">${imports(tuttiN)}</div>`, 'griglia della lista');
   lista = sostituisci(lista, /00 case in vendita con questi filtri/, elenco.length === 1 ? '1 casa in vendita' : `${elenco.length} case in vendita`, 'conteggio');
   scrivi('2-04-immobili-in-vendita.dc.html', lista);
+  // indice per i filtri della 2-04 (filtri-immobili.js): solo dati già pubblici nelle schede
+  const indice = elenco.map(e => ({ pagina: paginaDi(e), comune: e.comune || '', tipologia: etichetta(e.tipologia),
+    prezzo: num(e.prezzo), locali: num(e.locali), superficie: num(e.superficie) }));
+  scrivi('indice-immobili.js', `window.DOMUS_IMMOBILI = ${JSON.stringify(indice)};\n`);
 
   const comuni = [...new Set(elenco.map(e => e.comune).filter(Boolean))].sort((x, y) => x.localeCompare(y, 'it'));
   const f203 = '2-03-comprare-casa.dc.html';
