@@ -738,3 +738,5 @@ a:hover { text-decoration-color: var(--ink); }
 .duo.affianco > .st > :is(.lista, .voci) { margin-top: var(--s3); }
 .duo.affianco > .da-foto img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
 .sz.v .duo.affianco > .da-foto { border-color: var(--bianco); }
+.duo.affianco > .st > .sospeso + .txt { margin-top: var(--s3); }
+.st > .sospeso + .grid { margin-top: var(--s4); }
