@@ -113,3 +113,10 @@
 .cn-dati { list-style: none; display: flex; flex-direction: column; gap: 6px; margin-top: var(--s1); padding-top: var(--s2); border-top: 1px solid var(--grigio); font-size: 17px; line-height: 24px; }
 .cn-vai { display: inline-flex; align-items: center; min-height: 44px; margin-top: auto; padding-top: var(--s1); font-weight: 700; color: var(--ink); text-decoration: underline; text-decoration-color: var(--rosso); text-underline-offset: 5px; }
 @media (max-width: 599px) { .cn-stato { font-size: 16px; } .cn-dati { font-size: 18px; line-height: 26px; } }
+/* contrasto delle schede (15/10/2026): vedi in fondo a struttura.css */
+.im-zona { color: var(--verde); font-weight: 700; }
+.cn-stato { background: var(--verde); color: var(--bianco); } /* bianco sul verde 5,4:1 */
+.cn-dati { border-top: 2px solid var(--verde); }
+.im-etichetta { border: 1px solid rgba(15, 36, 18, .24); }
+.im-cerchio { background: var(--verde); border-color: var(--verde); color: var(--bianco); }
+.sz.b .im-cerchio { background: var(--verde); }

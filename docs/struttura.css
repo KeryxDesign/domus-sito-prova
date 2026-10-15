@@ -725,3 +725,8 @@ a:hover { text-decoration-color: var(--ink); }
 @media (min-width: 600px) and (max-width: 899px) { .sz.hero.home .h-home { font-size: 26px; line-height: 32px; } }
 @media (min-width: 900px) { .sz.hero.home .h-home { font-size: 36px; line-height: 44px; } }
 @media (max-width: 370px) { .sz.hero.home .h-home { font-size: 26px; line-height: 32px; } }
+/* CONTRASTO DELLE SCHEDE (15/10/2026, richiesta di Davide): le schede si staccano dal fondo e usano il verde per i segni che contano. Solo colori della tavolozza */
+.card, .passi > li { box-shadow: 0 0 0 1px rgba(15, 36, 18, .16), 0 6px 16px rgba(15, 36, 18, .10); } /* contorno e ombra tinti come --ink */
+.card.foto > .ph { border-width: 0 0 4px 0; border-color: var(--verde); }
+.card .small { color: var(--verde); font-weight: 700; } /* luogo della casa: verde sul bianco 5,4:1, sul #efefef 4,8:1 */
+.card .prezzo, .cn-dati strong, .im-etichetta dd { color: var(--verde); }
