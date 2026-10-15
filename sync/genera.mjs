@@ -2,11 +2,14 @@
 //   node sync/genera.mjs             con ONOFFICE_TOKEN e ONOFFICE_SECRET legge onOffice, senza usa sync/dati-finti.json
 //   node sync/genera.mjs --finti     usa sempre i dati finti
 //   node sync/genera.mjs --verifica  stampa solo struttura e conteggi dell'account onOffice, non genera nulla
+//   node sync/genera.mjs --contenuti-prova  articoli e domande da sync/contenuti-prova.json invece che da WordPress
+// Articoli e domande frequenti arrivano da WordPress solo se c'è WORDPRESS_API (vedi sync/wordpress.mjs); senza, quelle pagine restano come in docs/.
 // Regole: _site/ non va mai nel repo (è in .gitignore). Il log contiene solo conteggi, mai valori dei record.
 import { readFileSync, writeFileSync, rmSync, cpSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as oo from './onoffice.mjs';
+import * as wp from './wordpress.mjs';
 
 const RADICE = join(dirname(fileURLToPath(import.meta.url)), '..');
 // Nell'Action le chiavi arrivano dai Secrets. In locale da .env (in .gitignore, mai nel repo): deroga decisa da Davide il 14/10/2026.
@@ -168,6 +171,52 @@ function paginaImmobile(modello, e, n, tutti, agenti) {
   return s;
 }
 
+// ---------- articoli e domande (WordPress) ----------
+const paginaArticolo = a => `articolo-${String(a.slug).replace(/[^a-z0-9-]/g, '')}.dc.html`;
+const dataIt = d => d ? new Date(d).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+
+function cardArticolo(a) {
+  const foto = a.foto ? `<img src="${esc(a.foto)}" alt="" loading="lazy">` : '<span>Foto</span>';
+  const cat = a.categoria ? `<span class="co-cat">${esc(a.categoria)}</span>` : '';
+  return `<a class="card foto co-link co-articolo" href="${paginaArticolo(a)}"><div class="ph r43">${foto}</div><div class="corpo"><p class="co-meta">${cat}<span>${a.minuti} min di lettura</span></p><h2 class="h3">${esc(a.titolo)}</h2><p>${esc(a.sommario)}</p></div></a>`;
+}
+
+function articolo(modello, a) {
+  let s = sostituisci(modello, /<title>[^<]*<\/title>/, () => `<title>${esc(a.titolo)} · Domus Real Estate</title>`, 'titolo della 2-13');
+  const firma = a.autore ? `<div class="agente co-firma"><div class="ph r11" aria-hidden="true"><span>${esc(iniziali(a.autore))}</span></div><div><p class="forte">${esc(a.autore)}</p><p class="small">${esc(dataIt(a.data))}</p></div></div>` : `<p class="small">${esc(dataIt(a.data))}</p>`;
+  const foto = a.foto ? `<figure><div class="ph r169"><img src="${esc(a.foto)}" alt="${esc(a.fotoAlt)}"></div></figure>` : '';
+  const lead = a.sommario ? `<p class="lead">${esc(a.sommario)}</p>` : '';
+  return sostituisci(s, /<h1>[\s\S]*?(?=<\/article>)/, () => `<h1>${esc(a.titolo)}</h1>\n  ${lead}\n  ${firma}\n  ${foto}\n  <div class="co-wp st">${a.html}</div>\n`, 'corpo della 2-13');
+}
+
+function domandeFrequenti(s, faq) {
+  const lead = faq.intro ? `<p class="lead">${esc(faq.intro)}</p>` : '';
+  const salti = faq.gruppi.map(g => `<a href="#${esc(g.id)}">${esc(g.titolo)}</a>`).join('');
+  s = sostituisci(s, /<h1>[^<]*<\/h1>\s*<p class="lead">[^<]*<\/p>\s*<div class="etichette">[\s\S]*?<\/div>/,
+    () => `<h1>${esc(faq.titolo)}</h1>\n  ${lead}\n  <div class="etichette">${salti}</div>`, 'testata della 2-15');
+  const gruppi = faq.gruppi.map(g => `<div class="gruppo" id="${esc(g.id)}">\n    <h2>${esc(g.titolo)}</h2>\n    <div>\n${g.voci.map(v =>
+    `      <details class="acc"><summary>${esc(v.domanda)}</summary><div>${v.risposta}</div></details>`).join('\n')}\n    </div>\n  </div>`).join('\n');
+  return sostituisci(s, /(<section class="sz g" data-blocco="2\.15 · 3 4"><div class="wrap">)[\s\S]*?(<\/div><\/section>)/, (_, a, b) => `${a}\n${gruppi}\n${b}`, 'gruppi della 2-15');
+}
+
+async function contenutiWordPress(prova) {
+  const base = wp.indirizzo();
+  const c = prova ? json('contenuti-prova.json') : base ? await wp.contenuti(base) : null;
+  if (!c) { console.log('Articoli e domande: nessun WordPress collegato, pagine lasciate come in docs/.'); return; }
+  const arts = c.articoli.filter(a => a.slug && a.titolo);
+  if (arts.length) {
+    const modello = leggi('2-13-articolo.dc.html');
+    for (const a of arts) scrivi(paginaArticolo(a), articolo(modello, a));
+    // la 2-13 diventa l'articolo più recente, così i link del menu non mostrano un articolo vuoto
+    scrivi('2-13-articolo.dc.html', articolo(modello, arts[0]));
+    scrivi('2-12-approfondimenti.dc.html', sostituisci(leggi('2-12-approfondimenti.dc.html'),
+      /(<section class="sz g" data-blocco="2\.12 · 4">[\s\S]*?<div class="grid c3">)[\s\S]*?(<\/div>\n<\/div><\/section>)/,
+      (_, a, b) => `${a}\n    ${arts.map(cardArticolo).join('\n    ')}\n  ${b}`, 'griglia articoli della 2-12'));
+  }
+  if (c.faq?.gruppi?.length) scrivi('2-15-domande-e-risposte.dc.html', domandeFrequenti(leggi('2-15-domande-e-risposte.dc.html'), c.faq));
+  console.log(`Fonte articoli e domande: ${prova ? 'contenuti di prova' : 'WordPress'}. Articoli: ${arts.length}. Domande: ${(c.faq?.gruppi ?? []).reduce((n, g) => n + g.voci.length, 0)}`);
+}
+
 async function main() {
   const args = process.argv.slice(2);
   const cred = args.includes('--finti') ? null : oo.credenziali();
@@ -214,6 +263,7 @@ async function main() {
     conteggioSedi[sede] = ns.length;
     scrivi(f, sostituisci(leggi(f), griglia, `<div class="grid c3">${imports(ns)}</div>`, `griglia di ${f}`));
   }
+  await contenutiWordPress(args.includes('--contenuti-prova'));
   console.log(`Pagine immobile: ${elenco.length}. Per sede: ${Object.entries(conteggioSedi).map(([k, v]) => `${k} ${v}`).join(', ')}. Senza agente in agenti.json: ${elenco.filter(e => !agenti[e.agente]).length}`);
 }
 

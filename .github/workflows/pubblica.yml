@@ -1,12 +1,16 @@
 # Costruisce il sito di prova e lo pubblica su GitHub Pages senza salvare dati nel repo.
 # Gli immobili si leggono da onOffice solo durante la build: finiscono nell'artefatto di Pages, mai in un commit.
 # Senza i Secrets ONOFFICE_TOKEN e ONOFFICE_SECRET il sito si costruisce con sync/dati-finti.json.
+# Articoli e domande frequenti si leggono da WordPress se la variabile del repo WORDPRESS_API è impostata (sync/wordpress.mjs).
 name: Pubblica sito di prova
 on:
   push:
     branches: [main]
   schedule:
     - cron: '17 5,12 * * *'   # due volte al giorno (UTC)
+  # WordPress chiama questo evento quando Luana pubblica o modifica (vedi sync/README.md)
+  repository_dispatch:
+    types: [contenuti-aggiornati]
   workflow_dispatch:
     inputs:
       verifica:
@@ -47,6 +51,7 @@ jobs:
         env:
           ONOFFICE_TOKEN: ${{ vars.ONOFFICE_ATTIVO == 'si' && secrets.ONOFFICE_TOKEN || '' }}
           ONOFFICE_SECRET: ${{ vars.ONOFFICE_ATTIVO == 'si' && secrets.ONOFFICE_SECRET || '' }}
+          WORDPRESS_API: ${{ vars.WORDPRESS_API }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with: { path: _site }
