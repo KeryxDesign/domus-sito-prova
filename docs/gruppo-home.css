@@ -16,3 +16,10 @@
 .hm-link { text-align: center; }
 .hm-domande { max-width: 46em; margin-left: auto; margin-right: auto; width: 100%; }
 @media (max-width: 599px) { .hm-fiducia .tb-num strong { font-size: 19px; line-height: 24px; } }
+/* testi di Luana sospesi (garanzia, bollino, numeri senza fonte): restano visibili dentro il riquadro tratteggiato */
+.hm-sospeso { margin: var(--s1) 0; }
+.lista > li.sospeso { padding-left: var(--s3); }
+.lista > li.sospeso::before { display: none; }
+.passi > li.sospeso { border: 2px dashed var(--grigio); }
+.sz.vs .trustbar li.sospeso { border-color: var(--bianco); }
+.sz.vs .trustbar li.sospeso .stato { border-color: var(--bianco); color: var(--bianco); }
