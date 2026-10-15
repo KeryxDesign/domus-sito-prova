@@ -130,3 +130,8 @@
 .im-agente-lato .btn { width: 100%; }
 /* nelle card un dato vuoto non si mostra */
 .im-etichetta:has(dd:empty) { display: none; }
+/* scheda immobile: un dato per riga, icona, «Categoria:» e dato */
+.pannello .dati { grid-template-columns: minmax(0, 1fr); gap: var(--s1); }
+.pannello .dati [data-ico] { display: flex; align-items: center; flex-wrap: wrap; gap: 0 8px; }
+.pannello .dati [data-ico]::before { grid-row: auto; margin-top: 0; }
+.pannello .dati dt::after { content: ":"; }
