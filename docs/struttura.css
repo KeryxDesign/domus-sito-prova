@@ -740,3 +740,8 @@ a:hover { text-decoration-color: var(--ink); }
 .sz.v .duo.affianco > .da-foto { border-color: var(--bianco); }
 .duo.affianco > .st > .sospeso + .txt { margin-top: var(--s3); }
 .st > .sospeso + .grid { margin-top: var(--s4); }
+/* testo di prova (15/10/2026): scritto da noi in attesa del testo di Luana */
+.prova { display: inline-block; align-self: flex-start; padding: 0 var(--s1); background: var(--giallo); color: var(--ink); border-radius: 4px; font-size: 15px; line-height: 24px; font-weight: 700; }
+.st > .prova + * { margin-top: var(--s1); }
+.invito > .st > .prova { margin-left: auto; margin-right: auto; }
+.sz > .wrap.st > .prova { display: table; margin-left: auto; margin-right: auto; }
