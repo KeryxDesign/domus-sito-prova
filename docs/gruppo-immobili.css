@@ -135,3 +135,6 @@
 .pannello .dati [data-ico] { display: flex; align-items: center; flex-wrap: wrap; gap: 0 8px; }
 .pannello .dati [data-ico]::before { grid-row: auto; margin-top: 0; }
 .pannello .dati dt::after { content: ":"; }
+/* il riquadro dell'agente si stacca dalla card grigia del prezzo: fondo bianco, bordo tenue, filo verde in alto */
+.sz .im-agente-lato { background: var(--bianco); border: 2px solid var(--tenue); border-top: 4px solid var(--verde); }
+.sz .im-agente-lato .im-cerchio { background: var(--verde); }
