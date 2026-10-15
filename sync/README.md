@@ -26,3 +26,11 @@ WordPress serve solo come area dove Luana scrive: nessuno visita il sito WordPre
 - `node sync/genera.mjs --finti --contenuti-prova` mostra le pagine con `contenuti-prova.json`, senza WordPress.
 
 Aggiornamento quando Luana pubblica: il sito si ricostruisce già due volte al giorno e con Run workflow. Per farlo subito, WordPress manda a GitHub l'evento `contenuti-aggiornati` (`POST https://api.github.com/repos/KeryxDesign/domus-sito-prova/dispatches` con `{"event_type":"contenuti-aggiornati"}`), con un token GitHub a grana fine limitato a questo repo (permesso Contents: read and write). Il token sta solo nella configurazione di WordPress, mai nel repo. Basta un plugin di webhook oppure un piccolo snippet su `transition_post_status`.
+
+## Copia su Hostinger
+
+La stessa build può caricare il sito anche su Hostinger (job `hostinger` della GitHub Action), così il sito di prova e WordPress stanno sullo stesso hosting. La build resta su GitHub: la chiave onOffice non arriva mai su Hostinger, ci arriva solo il sito già pronto.
+
+- Si accende con la variabile `HOSTINGER_ATTIVO = si`. Secrets: `HOSTINGER_FTP_HOST`, `HOSTINGER_FTP_UTENTE`, `HOSTINGER_FTP_PASSWORD`. Variabile `HOSTINGER_CARTELLA` (per un sottodominio di solito `domains/<sottodominio>/public_html`).
+- Su Hostinger va con i dati finti. Gli immobili veri ci vanno solo con `ONOFFICE_HOSTINGER = si`, da accendere dopo l'ok di DomuSync (l'Allegato III parla di GitHub Pages e Actions).
+- La protezione con password si mette dal pannello Hostinger (cartella protetta): il caricamento non tocca `.htaccess` e `.htpasswd`.
