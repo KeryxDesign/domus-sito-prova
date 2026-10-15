@@ -115,7 +115,7 @@ function componente(card) {
     });`, 'ritorno della card');
   s = sostituisci(s, /<div class="ph r21" aria-hidden="true" data-campo="foto"><span>[^<]*<\/span><\/div>/,
     '<div class="ph r21" aria-hidden="true" data-campo="foto"><img src="{{ foto }}" alt="" loading="lazy"></div>', 'foto della card');
-  for (const [campo, segnaposto] of [['tipologia', 'tipologia'], ['codice', 'codice'], ['bagni', 'bagni'], ['classe-energetica', 'classe'], ['agente-iniziali', 'iniziali'], ['agente', 'agente']]) {
+  for (const [campo, segnaposto] of [['tipologia', 'tipologia'], ['bagni', 'bagni'], ['classe-energetica', 'classe'], ['agente-iniziali', 'iniziali'], ['agente', 'agente']]) {
     s = sostituisci(s, new RegExp(`(data-campo="${campo}">)[^<{]*(<)`), `$1{{ ${segnaposto} }}$2`, `campo ${campo}`);
   }
   scrivi('SchedaImmobile.dc.html', s);
@@ -131,7 +131,7 @@ function paginaImmobile(modello, e, n, tutti, agenti) {
   const paragrafi = String(e.descrizione ?? '').split(/\n\s*\n|\r\n\s*\r\n/).map(p => p.trim()).filter(Boolean);
   const wa = a.whatsapp ? `https://wa.me/${esc(a.whatsapp)}` : '2-11-contatti.dc.html';
   const tel = a.whatsapp ? `<a class="btn alt" href="tel:+${esc(a.whatsapp)}">Chiama</a>` : '';
-  const mail = `mailto:${esc(a.email || 'info@domusrealestate.it')}?subject=${encodeURIComponent(e.titolo)}`;
+  const mail = `mailto:${esc(a.email || 'info@domusrealestate.it')}?subject=${encodeURIComponent(e.titolo + (e.codice ? ` (rif. ${e.codice})` : ''))}`;
   // case simili: stessa sede o tipologia, poi le più vicine di prezzo
   const simili = tutti.map((x, i) => ({ x, n: i + 1 })).filter(o => o.n !== n)
     .sort((p, q) => ((q.x.comune === e.comune) - (p.x.comune === e.comune)) || (Math.abs(num(p.x.prezzo) - num(e.prezzo)) - Math.abs(num(q.x.prezzo) - num(e.prezzo))))
@@ -143,7 +143,7 @@ function paginaImmobile(modello, e, n, tutti, agenti) {
   s = sostituisci(s, /(<div class="gal galleria im-galleria im-striscia">)[\s\S]*?(<\/div>\s*)(<div class="pan pannello lato">)/,
     (_, a1, a2, a3) => a1 + foto.map((u, i) => `<div class="ph r43"><img src="${esc(u)}" alt="Foto ${i + 1} di ${foto.length} dell’immobile" loading="${i ? 'lazy' : 'eager'}"></div>`).join('') + a2 + a3, 'galleria');
   s = sostituisci(s, /<dd class="prezzo grande">[^<]*<\/dd>/, `<dd class="prezzo grande">${esc(euro(e.prezzo))}</dd>`, 'prezzo');
-  const dati = [['Comune', e.comune, 'comune'], ['Superficie', mq(e.superficie), 'superficie'], ['Locali', intero(e.locali), 'locali'], ['Bagni', intero(e.bagni), 'bagni'], ['Piano', piano(e.piano), 'piano'], ['Classe energetica', e.classe, 'classe'], ['Codice', e.codice, 'codice']]
+  const dati = [['Comune', e.comune, 'comune'], ['Superficie', mq(e.superficie), 'superficie'], ['Locali', intero(e.locali), 'locali'], ['Bagni', intero(e.bagni), 'bagni'], ['Piano', piano(e.piano), 'piano'], ['Classe energetica', e.classe, 'classe']]
     .filter(([, v]) => v).map(([k, v, ico]) => `<div data-ico="${ico}"><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('');
   s = sostituisci(s, /<dl class="dati">[\s\S]*?<\/dl>/, `<dl class="dati">${dati}</dl>`, 'dati');
   s = sostituisci(s, /<div class="azioni im-barra">[\s\S]*?<\/div>/, `<div class="azioni im-barra"><a class="btn" href="${wa}">Scrivi all’agente</a><a class="btn alt" href="${mail}">Scrivi una mail</a></div>`, 'pulsanti');
