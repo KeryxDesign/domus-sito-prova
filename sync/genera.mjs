@@ -27,7 +27,14 @@ const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').re
 const num = v => { const n = parseFloat(v); return Number.isFinite(n) ? n : null; };
 const euro = v => num(v) ? Math.round(num(v)).toLocaleString('it-IT').replace(/,/g, '.') + ' euro' : 'Prezzo su richiesta';
 const mq = v => num(v) ? `${Math.round(num(v))} mq` : '';
-const intero = v => num(v) !== null ? String(+num(v).toFixed(1)).replace('.', ',') : '';
+// 0 in onOffice vuol dire campo non compilato: lo trattiamo come vuoto e la riga non si mostra
+const pos = v => num(v) > 0 ? num(v) : null;
+const intero = v => pos(v) !== null ? String(+pos(v).toFixed(1)).replace('.', ',') : '';
+// se i locali mancano li ricaviamo dalla parola usata nell'annuncio (trilocale = 3)
+const PAROLE_LOCALI = { monolocale: 1, bilocale: 2, trilocale: 3, quadrilocale: 4, pentalocale: 5 };
+const localiDi = e => pos(e.locali) ?? [e.tipologia, e.titolo, e.descrizione]
+  .map(t => String(t ?? '').toLowerCase().match(/\b(monolocale|bilocale|trilocale|quadrilocale|pentalocale)\b/))
+  .filter(Boolean).map(m => PAROLE_LOCALI[m[1]])[0] ?? null;
 const PIANI = ['Piano terra', 'Primo', 'Secondo', 'Terzo', 'Quarto', 'Quinto', 'Sesto', 'Settimo', 'Ottavo', 'Nono', 'Decimo'];
 const piano = v => { const n = num(v); return n === null ? '' : (PIANI[n] ?? `${n}°`); };
 const iniziali = nome => nome.split(/\s+/).filter(Boolean).slice(0, 2).map(p => p[0].toUpperCase()).join('');
@@ -150,9 +157,11 @@ function paginaImmobile(modello, e, n, tutti, agenti) {
   const [primo, ...resto] = paragrafi;
   const desc = `<div class="desc"><p>${esc(primo ?? '')}</p>` + (resto.length ? `<details class="leggi"><summary>Leggi tutto</summary><div class="txt">${resto.map(p => `<p>${esc(p)}</p>`).join('')}</div></details>` : '') + '</div>';
   s = sostituisci(s, /<div class="desc">[\s\S]*?<\/details><\/div>/, desc, 'descrizione');
-  const fotoAg = a.foto ? `<img src="${esc(a.foto)}" alt="${esc(a.nome)}" loading="lazy">` : `<span class="im-cerchio" aria-hidden="true">${esc(iniziali(a.nome))}</span>`;
-  s = sostituisci(s, /<div class="im-agente-casa card">[\s\S]*?<\/section>/,
-    `<div class="im-agente-casa card"><div class="ph im-agente-foto">${fotoAg}</div><div class="im-agente-testo"><p class="h3">${esc(a.nome)}</p><p class="small">${esc(a.ruolo)}</p><p>Ti richiama per fissare giorno e ora della visita. In visita puoi chiedere tutto, anche quello che nell’annuncio non c’è.</p><div class="azioni"><a class="btn" href="${wa}">Scrivi all’agente</a>${tel}<a class="btn alt" href="${esc(a.pagina)}">Apri la sua pagina</a></div></div></div></div></section>`, 'riquadro agente');
+  // l'agente sta sotto la card grigia del prezzo, con le iniziali e senza foto
+  const agente = `<div class="card im-agente-lato"><div class="im-chi"><span class="im-cerchio" aria-hidden="true">${esc(iniziali(a.nome))}</span><div><p class="h3">${esc(a.nome)}</p><p class="small">${esc(a.ruolo)}</p></div></div><p>Ti richiama per fissare giorno e ora della visita. In visita puoi chiedere tutto, anche quello che nell’annuncio non c’è.</p><div class="azioni">${tel}<a class="btn alt" href="${esc(a.pagina)}">Apri la sua pagina</a></div></div>`;
+  s = sostituisci(s, /<div class="pan pannello lato">([\s\S]*?)<\/div>(\n<div class="desc">)/,
+    (_, dentro, dopo) => `<div class="pan lato im-colonna"><div class="pannello">${dentro}</div>${agente}</div>${dopo}`, 'colonna del prezzo');
+  s = sostituisci(s, /<section class="sz g" data-blocco="2\.5 · agente">[\s\S]*?<\/section>\n?/, '', 'sezione agente');
   s = simili.length ? sostituisci(s, griglia, `<div class="grid c3">${imports(simili)}</div>`, 'case simili')
     : sostituisci(s, /<section class="sz b" data-blocco="2\.5 · 10">[\s\S]*?<\/section>/, '', 'case simili');
   return s;
@@ -167,6 +176,9 @@ async function main() {
   }
   const elenco = cred ? await daOnOffice(cred) : json('dati-finti.json').immobili;
   console.log(`Fonte: ${cred ? 'onOffice' : 'dati finti'}. Immobili: ${elenco.length}`);
+  for (const e of elenco) e.locali = localiDi(e);
+  // solo conteggi nel log, mai valori
+  console.log('Campi vuoti o a zero:', ['prezzo', 'superficie', 'locali', 'bagni'].map(k => `${k} ${elenco.filter(e => pos(e[k]) === null).length}`).join(', '));
   const agenti = json('agenti.json'), sedi = json('sedi.json');
 
   rmSync(USCITA, { recursive: true, force: true });
@@ -186,7 +198,7 @@ async function main() {
   scrivi('2-04-immobili-in-vendita.dc.html', lista);
   // indice per i filtri della 2-04 (filtri-immobili.js): solo dati già pubblici nelle schede
   const indice = elenco.map(e => ({ pagina: paginaDi(e), comune: e.comune || '', tipologia: etichetta(e.tipologia),
-    prezzo: num(e.prezzo), locali: num(e.locali), superficie: num(e.superficie) }));
+    prezzo: pos(e.prezzo), locali: pos(e.locali), superficie: pos(e.superficie) }));
   scrivi('indice-immobili.js', `window.DOMUS_IMMOBILI = ${JSON.stringify(indice)};\n`);
 
   const comuni = [...new Set(elenco.map(e => e.comune).filter(Boolean))].sort((x, y) => x.localeCompare(y, 'it'));

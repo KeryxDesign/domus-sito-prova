@@ -121,3 +121,12 @@
 .im-cerchio { background: var(--verde); border-color: var(--verde); color: var(--bianco); }
 .sz.b .im-cerchio { background: var(--verde); }
 @media (min-width: 600px) { .cerca.im-cerca1 { grid-template-columns: minmax(0, 1fr) auto; max-width: 640px; } }
+/* scheda immobile: l'agente sotto la card grigia del prezzo */
+.im-colonna { display: flex; flex-direction: column; gap: var(--s3); }
+.im-agente-lato { display: flex; flex-direction: column; gap: var(--s2); padding: var(--s3); }
+.im-agente-lato .im-chi { display: flex; align-items: center; gap: var(--s2); }
+.im-agente-lato .im-cerchio { flex: 0 0 56px; width: 56px; height: 56px; font-size: 19px; }
+.im-agente-lato .azioni { flex-direction: column; }
+.im-agente-lato .btn { width: 100%; }
+/* nelle card un dato vuoto non si mostra */
+.im-etichetta:has(dd:empty) { display: none; }
