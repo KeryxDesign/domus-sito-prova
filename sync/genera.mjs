@@ -184,6 +184,10 @@ async function main() {
   lista = sostituisci(lista, /00 case in vendita con questi filtri/, elenco.length === 1 ? '1 casa in vendita' : `${elenco.length} case in vendita`, 'conteggio');
   scrivi('2-04-immobili-in-vendita.dc.html', lista);
 
+  const comuni = [...new Set(elenco.map(e => e.comune).filter(Boolean))].sort((x, y) => x.localeCompare(y, 'it'));
+  const f203 = '2-03-comprare-casa.dc.html';
+  if (existsSync(join(USCITA, f203))) scrivi(f203, sostituisci(leggi(f203), /<option value="">Comune<\/option><\/select>/, `<option value="">Comune</option>${comuni.map(c => `<option>${esc(c)}</option>`).join('')}</select>`, 'comuni della 2-03'));
+
   const conteggioSedi = {};
   for (const sede of ['treviglio', 'martinengo', 'collecchio']) {
     const f = `2-08-sede-${sede}.dc.html`;

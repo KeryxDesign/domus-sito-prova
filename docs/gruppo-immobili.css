@@ -120,3 +120,4 @@
 .im-etichetta { border: 1px solid rgba(15, 36, 18, .24); }
 .im-cerchio { background: var(--verde); border-color: var(--verde); color: var(--bianco); }
 .sz.b .im-cerchio { background: var(--verde); }
+@media (min-width: 600px) { .cerca.im-cerca1 { grid-template-columns: minmax(0, 1fr) auto; max-width: 640px; } }
