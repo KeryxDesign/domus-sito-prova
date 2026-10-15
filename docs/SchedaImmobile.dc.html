@@ -12,9 +12,9 @@
 <helmet><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,700;1,400;1,700&display=swap"><link rel="stylesheet" href="./struttura.css"><link rel="stylesheet" href="./gruppo-immobili.css"></helmet>
 <sc-if value="{{ esiste }}" hint-placeholder-val="{{ true }}"><a class="card foto im-scheda" href="{{ collegamento }}" data-testo="TESTO DI PROVA">
 <div class="ph r21" aria-hidden="true" data-campo="foto"><span>Foto · immobile · 2:1</span></div>
-<div class="corpo"><dl class="im-prezzo"><dt>Prezzo</dt><dd class="prezzo" data-campo="prezzo">{{ prezzo }}</dd></dl><h3 data-campo="titolo">{{ titolo }}</h3><p class="im-zona" data-campo="comune">{{ comune }}</p>
+<div class="corpo"><dl class="im-prezzo"><dt>Prezzo</dt><dd class="prezzo" data-campo="prezzo">{{ prezzo }}</dd></dl><h3 data-campo="titolo">{{ titolo }}</h3><p class="im-zona" data-ico="comune" data-campo="comune">{{ comune }}</p>
 <p class="im-meta"><span data-campo="tipologia">Tipologia · 20</span><span data-campo="codice">Codice · 10</span></p>
-<dl class="etichette im-dati"><div class="im-etichetta"><dt>Superficie</dt> <dd data-campo="superficie">{{ superficie }}</dd></div><div class="im-etichetta"><dt>Locali</dt> <dd data-campo="locali">{{ locali }}</dd></div><div class="im-etichetta"><dt>Bagni</dt> <dd data-campo="bagni">· 2</dd></div><div class="im-etichetta"><dt>Classe energetica</dt> <dd data-campo="classe-energetica">· 3</dd></div></dl>
+<dl class="etichette im-dati"><div class="im-etichetta" data-ico="superficie"><dt>Superficie</dt> <dd data-campo="superficie">{{ superficie }}</dd></div><div class="im-etichetta" data-ico="locali"><dt>Locali</dt> <dd data-campo="locali">{{ locali }}</dd></div><div class="im-etichetta" data-ico="bagni"><dt>Bagni</dt> <dd data-campo="bagni">· 2</dd></div><div class="im-etichetta" data-ico="classe"><dt>Classe energetica</dt> <dd data-campo="classe-energetica">· 3</dd></div></dl>
 <div class="im-piede"><div class="im-agente"><span class="im-cerchio" aria-hidden="true" data-campo="agente-iniziali">AP</span><span data-campo="agente">Agente di prova</span></div><span class="vai">Apro la scheda</span></div></div>
 </a></sc-if>
 </x-dc>

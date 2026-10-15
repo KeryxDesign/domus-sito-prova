@@ -745,3 +745,19 @@ a:hover { text-decoration-color: var(--ink); }
 .st > .prova + * { margin-top: var(--s1); }
 .invito > .st > .prova { margin-left: auto; margin-right: auto; }
 .sz > .wrap.st > .prova { display: table; margin-left: auto; margin-right: auto; }
+
+/* Icone dei campi immobile: comune, superficie, locali, bagni, piano, classe, codice (15/10/2026) */
+[data-ico]::before { content: ""; flex: none; width: 20px; height: 20px; background: var(--verde); -webkit-mask: var(--ico) center / contain no-repeat; mask: var(--ico) center / contain no-repeat; }
+.im-zona[data-ico], .im-etichetta[data-ico] { display: inline-flex; align-items: center; gap: 6px; }
+.im-zona[data-ico] { display: flex; }
+.im-etichetta[data-ico] dt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.im-etichetta:has(dd:empty) { display: none; }
+.dati [data-ico] { display: grid; grid-template-columns: 24px 1fr; column-gap: 8px; align-items: start; }
+.dati [data-ico]::before { grid-row: 1 / span 2; width: 24px; height: 24px; margin-top: 2px; }
+[data-ico="comune"] { --ico: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12%2021s-7-6.2-7-11.5a7%207%200%200%201%2014%200C19%2014.8%2012%2021%2012%2021z%22%2F%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%229.5%22%20r%3D%222.5%22%2F%3E%3C%2Fsvg%3E"); }
+[data-ico="superficie"] { --ico: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%224%22%20y%3D%224%22%20width%3D%2216%22%20height%3D%2216%22%20rx%3D%221%22%2F%3E%3Cpath%20d%3D%22M4%209h3M4%2014h3M9%2020v-3M14%2020v-3%22%2F%3E%3C%2Fsvg%3E"); }
+[data-ico="locali"] { --ico: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%2021V4h12v17M3%2021h18%22%2F%3E%3Cpath%20d%3D%22M14.5%2012.5h.01%22%2F%3E%3C%2Fsvg%3E"); }
+[data-ico="bagni"] { --ico: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M4%2012h16v2a5%205%200%200%201-5%205H9a5%205%200%200%201-5-5z%22%2F%3E%3Cpath%20d%3D%22M6%2012V6.5a2.5%202.5%200%200%201%205%200M7%2019l-1%202M17%2019l1%202%22%2F%3E%3C%2Fsvg%3E"); }
+[data-ico="piano"] { --ico: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M4%2020h4v-4h4v-4h4V8h4%22%2F%3E%3C%2Fsvg%3E"); }
+[data-ico="classe"] { --ico: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M13%203L5%2014h6l-1%207%208-11h-6z%22%2F%3E%3C%2Fsvg%3E"); }
+[data-ico="codice"] { --ico: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M5%209h14M5%2015h14M10%204L8%2020M16%204l-2%2016%22%2F%3E%3C%2Fsvg%3E"); }

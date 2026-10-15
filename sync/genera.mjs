@@ -142,8 +142,8 @@ function paginaImmobile(modello, e, n, tutti, agenti) {
   s = sostituisci(s, /(<div class="gal galleria im-galleria im-striscia">)[\s\S]*?(<\/div>\s*)(<div class="pan pannello lato">)/,
     (_, a1, a2, a3) => a1 + foto.map((u, i) => `<div class="ph r43"><img src="${esc(u)}" alt="Foto ${i + 1} di ${foto.length} dell’immobile" loading="${i ? 'lazy' : 'eager'}"></div>`).join('') + a2 + a3, 'galleria');
   s = sostituisci(s, /<dd class="prezzo grande">[^<]*<\/dd>/, `<dd class="prezzo grande">${esc(euro(e.prezzo))}</dd>`, 'prezzo');
-  const dati = [['Comune', e.comune], ['Superficie', mq(e.superficie)], ['Locali', intero(e.locali)], ['Bagni', intero(e.bagni)], ['Piano', piano(e.piano)], ['Classe energetica', e.classe], ['Codice', e.codice]]
-    .filter(([, v]) => v).map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('');
+  const dati = [['Comune', e.comune, 'comune'], ['Superficie', mq(e.superficie), 'superficie'], ['Locali', intero(e.locali), 'locali'], ['Bagni', intero(e.bagni), 'bagni'], ['Piano', piano(e.piano), 'piano'], ['Classe energetica', e.classe, 'classe'], ['Codice', e.codice, 'codice']]
+    .filter(([, v]) => v).map(([k, v, ico]) => `<div data-ico="${ico}"><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('');
   s = sostituisci(s, /<dl class="dati">[\s\S]*?<\/dl>/, `<dl class="dati">${dati}</dl>`, 'dati');
   s = sostituisci(s, /<div class="azioni im-barra">[\s\S]*?<\/div>/, `<div class="azioni im-barra"><a class="btn" href="${wa}">Scrivi all’agente</a><a class="btn alt" href="${mail}">Scrivi una mail</a></div>`, 'pulsanti');
   const [primo, ...resto] = paragrafi;
