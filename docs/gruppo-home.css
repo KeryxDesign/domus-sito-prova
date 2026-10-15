@@ -1,0 +1,18 @@
+/* Home (15/10/2026): le due porte, la ricerca dentro la porta di chi compra, i riquadri sotto le sezioni */
+.hm-porte { align-items: stretch; }
+.hm-porta { gap: var(--s2); }
+.hm-porta .azioni { margin-top: auto; }
+/* nella porta la ricerca sta su una colonna, su due da 1100 */
+.hm-porta .cerca { padding: 0; background: none; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 1100px) { .hm-porta .cerca { grid-template-columns: repeat(2, minmax(0, 1fr)); } .hm-porta .cerca .btn { grid-column: 1 / -1; } }
+.sz.g .hm-porta .cerca { background: none; }
+.hm-porte + .hm-fiducia { margin-top: var(--s4); }
+/* riquadri dopo il pulsante della sezione: cantieri, TiTrovoCasa */
+.st > .azioni + .invito { margin-top: var(--s4); padding: var(--s3); border-radius: 4px; background: var(--tenue); }
+.sz.g .st > .azioni + .invito { background: var(--bianco); }
+.st > .grid + .azioni, .st > .grid + p, .st > div + p { margin-top: var(--s3); }
+.sz > .wrap.st > .azioni { justify-content: center; }
+@media (min-width: 1100px) { .passi.hm-p4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.hm-link { text-align: center; }
+.hm-domande { max-width: 46em; margin-left: auto; margin-right: auto; width: 100%; }
+@media (max-width: 599px) { .hm-fiducia .tb-num strong { font-size: 19px; line-height: 24px; } }
