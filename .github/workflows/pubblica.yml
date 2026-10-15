@@ -1,12 +1,16 @@
 # Costruisce il sito di prova e lo pubblica su GitHub Pages senza salvare dati nel repo.
 # Gli immobili si leggono da onOffice solo durante la build: finiscono nell'artefatto di Pages, mai in un commit.
 # Senza i Secrets ONOFFICE_TOKEN e ONOFFICE_SECRET il sito si costruisce con sync/dati-finti.json.
+# Articoli e domande frequenti si leggono da WordPress se la variabile del repo WORDPRESS_API è impostata (sync/wordpress.mjs).
 name: Pubblica sito di prova
 on:
   push:
     branches: [main]
   schedule:
     - cron: '17 5,12 * * *'   # due volte al giorno (UTC)
+  # WordPress chiama questo evento quando Luana pubblica o modifica (vedi sync/README.md)
+  repository_dispatch:
+    types: [contenuti-aggiornati]
   workflow_dispatch:
     inputs:
       verifica:
@@ -47,8 +51,35 @@ jobs:
         env:
           ONOFFICE_TOKEN: ${{ vars.ONOFFICE_ATTIVO == 'si' && secrets.ONOFFICE_TOKEN || '' }}
           ONOFFICE_SECRET: ${{ vars.ONOFFICE_ATTIVO == 'si' && secrets.ONOFFICE_SECRET || '' }}
+          WORDPRESS_API: ${{ vars.WORDPRESS_API }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with: { path: _site }
       - id: deploy
         uses: actions/deploy-pages@v4
+
+  # Copia del sito di prova su Hostinger (Keryx). Si accende con la variabile HOSTINGER_ATTIVO = si.
+  # Su Hostinger va con i dati finti: gli immobili veri ci vanno solo con ONOFFICE_HOSTINGER = si, dopo l'ok di DomuSync.
+  # Credenziali FTP solo nei Secrets HOSTINGER_FTP_HOST, HOSTINGER_FTP_UTENTE, HOSTINGER_FTP_PASSWORD; cartella nella variabile HOSTINGER_CARTELLA.
+  hostinger:
+    if: ${{ vars.HOSTINGER_ATTIVO == 'si' && !(github.event_name == 'workflow_dispatch' && inputs.verifica) }}
+    runs-on: ubuntu-latest
+    concurrency: { group: hostinger, cancel-in-progress: false }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node sync/genera.mjs
+        env:
+          ONOFFICE_TOKEN: ${{ vars.ONOFFICE_ATTIVO == 'si' && vars.ONOFFICE_HOSTINGER == 'si' && secrets.ONOFFICE_TOKEN || '' }}
+          ONOFFICE_SECRET: ${{ vars.ONOFFICE_ATTIVO == 'si' && vars.ONOFFICE_HOSTINGER == 'si' && secrets.ONOFFICE_SECRET || '' }}
+          WORDPRESS_API: ${{ vars.WORDPRESS_API }}
+      - run: sudo apt-get -qq install -y lftp >/dev/null
+      - name: Carica su Hostinger (FTPS)
+        env:
+          HOST: ${{ secrets.HOSTINGER_FTP_HOST }}
+          UTENTE: ${{ secrets.HOSTINGER_FTP_UTENTE }}
+          PASSWORD: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          CARTELLA: ${{ vars.HOSTINGER_CARTELLA }}
+        run: |
+          lftp -u "$UTENTE","$PASSWORD" "$HOST" -e "set ftp:ssl-force true; set ssl:verify-certificate true; mirror -R --delete --parallel=4 --exclude-glob .htaccess --exclude-glob .htpasswd _site/ ${CARTELLA:-public_html}/; quit"

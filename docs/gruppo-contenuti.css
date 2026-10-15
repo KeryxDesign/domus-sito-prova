@@ -51,3 +51,9 @@ a.co-link .h3, a.co-link:hover .h3 { text-decoration: none; }
 .co-cat { color: var(--rosso); }
 .co-conferma { background: var(--rosso); }
 a.co-link .h3 { text-decoration-color: var(--rosso); }
+
+/* corpo degli articoli scritto in WordPress */
+.co-wp > h2, .co-wp > h3 { margin-top: var(--s4); }
+.co-wp ul, .co-wp ol { padding-left: 1.25em; }
+.co-wp figure { margin-top: var(--s4); }
+.co-wp figcaption { margin-top: var(--s1); font-size: .875rem; }
