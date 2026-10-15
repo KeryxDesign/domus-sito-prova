@@ -725,3 +725,23 @@ a:hover { text-decoration-color: var(--ink); }
 @media (min-width: 600px) and (max-width: 899px) { .sz.hero.home .h-home { font-size: 26px; line-height: 32px; } }
 @media (min-width: 900px) { .sz.hero.home .h-home { font-size: 36px; line-height: 44px; } }
 @media (max-width: 370px) { .sz.hero.home .h-home { font-size: 26px; line-height: 32px; } }
+/* CONTRASTO DELLE SCHEDE (15/10/2026, richiesta di Davide): le schede si staccano dal fondo e usano il verde per i segni che contano. Solo colori della tavolozza */
+.card, .passi > li { box-shadow: 0 0 0 1px rgba(15, 36, 18, .16), 0 6px 16px rgba(15, 36, 18, .10); } /* contorno e ombra tinti come --ink */
+.card.foto > .ph { border-width: 0 0 4px 0; border-color: var(--verde); }
+.card .small { color: var(--verde); font-weight: 700; } /* luogo della casa: verde sul bianco 5,4:1, sul #efefef 4,8:1 */
+.card .prezzo, .cn-dati strong, .im-etichetta dd { color: var(--verde); }
+/* SEZIONI TITOLO + ELENCO (15/10/2026, richiesta di Davide): foto da un lato, dall'altro titolo e sottotitolo sopra l'elenco */
+.duo.affianco { align-items: center; }
+@media (min-width: 900px) { .duo.affianco { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: stretch; } .duo.affianco > .da-foto { aspect-ratio: auto; min-height: 360px; } }
+.duo.affianco > .st { text-align: left; align-self: center; }
+.duo.affianco > .st > :is(h2, p, .lead) { margin-left: 0; max-width: 34em; text-wrap: pretty; }
+.duo.affianco > .st > :is(.lista, .voci) { margin-top: var(--s3); }
+.duo.affianco > .da-foto img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+.sz.v .duo.affianco > .da-foto { border-color: var(--bianco); }
+.duo.affianco > .st > .sospeso + .txt { margin-top: var(--s3); }
+.st > .sospeso + .grid { margin-top: var(--s4); }
+/* testo di prova (15/10/2026): scritto da noi in attesa del testo di Luana */
+.prova { display: inline-block; align-self: flex-start; padding: 0 var(--s1); background: var(--giallo); color: var(--ink); border-radius: 4px; font-size: 15px; line-height: 24px; font-weight: 700; }
+.st > .prova + * { margin-top: var(--s1); }
+.invito > .st > .prova { margin-left: auto; margin-right: auto; }
+.sz > .wrap.st > .prova { display: table; margin-left: auto; margin-right: auto; }

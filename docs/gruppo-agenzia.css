@@ -85,3 +85,11 @@
 .ct-vai { display: inline-flex; align-items: center; min-height: 44px; margin-top: auto; font-weight: 700; }
 .ct-val.ct-mail { font-size: 20px; line-height: 28px; overflow-wrap: normal; }
 @media (min-width: 1200px) { .ct-val.ct-mail { font-size: 22px; line-height: 30px; } }
+/* schede delle sedi in Contatti (15/10/2026): foto sopra, indirizzo, orari e comuni separati, più aria */
+.ct-sede.foto > .corpo { gap: var(--s3); padding: var(--s3); }
+.ct-sede .ct-righe { list-style: none; display: flex; flex-direction: column; gap: 0; }
+.ct-sede .ct-righe > li { display: flex; align-items: flex-start; gap: var(--s2); padding: var(--s2) 0; border-top: 1px solid rgba(15, 36, 18, .16); }
+.ct-sede .ct-righe > li:last-child { border-bottom: 1px solid rgba(15, 36, 18, .16); }
+.ct-sede .ct-righe svg { flex: 0 0 22px; margin-top: 3px; color: var(--verde); }
+.ct-sede > .corpo > .small { padding: var(--s1) var(--s2); background: var(--bianco); border-left: 0; border-radius: 4px; color: var(--ink); font-weight: 400; }
+.ct-sede .ct-vai { margin-top: auto; }
