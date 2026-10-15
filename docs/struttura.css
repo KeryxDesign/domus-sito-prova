@@ -730,3 +730,11 @@ a:hover { text-decoration-color: var(--ink); }
 .card.foto > .ph { border-width: 0 0 4px 0; border-color: var(--verde); }
 .card .small { color: var(--verde); font-weight: 700; } /* luogo della casa: verde sul bianco 5,4:1, sul #efefef 4,8:1 */
 .card .prezzo, .cn-dati strong, .im-etichetta dd { color: var(--verde); }
+/* SEZIONI TITOLO + ELENCO (15/10/2026, richiesta di Davide): foto da un lato, dall'altro titolo e sottotitolo sopra l'elenco */
+.duo.affianco { align-items: center; }
+@media (min-width: 900px) { .duo.affianco { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: stretch; } .duo.affianco > .da-foto { aspect-ratio: auto; min-height: 360px; } }
+.duo.affianco > .st { text-align: left; align-self: center; }
+.duo.affianco > .st > :is(h2, p, .lead) { margin-left: 0; max-width: 34em; text-wrap: pretty; }
+.duo.affianco > .st > :is(.lista, .voci) { margin-top: var(--s3); }
+.duo.affianco > .da-foto img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+.sz.v .duo.affianco > .da-foto { border-color: var(--bianco); }
