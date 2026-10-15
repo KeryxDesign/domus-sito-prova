@@ -155,7 +155,8 @@ function paginaImmobile(modello, e, n, tutti, agenti) {
   s = sostituisci(s, /<dl class="dati">[\s\S]*?<\/dl>/, `<dl class="dati">${dati}</dl>`, 'dati');
   s = sostituisci(s, /<div class="azioni im-barra">[\s\S]*?<\/div>/, `<div class="azioni im-barra"><a class="btn" href="${wa}">Scrivi all’agente</a><a class="btn alt" href="${mail}">Scrivi una mail</a></div>`, 'pulsanti');
   const [primo, ...resto] = paragrafi;
-  const desc = `<div class="desc"><p>${esc(primo ?? '')}</p>` + (resto.length ? `<details class="leggi"><summary>Leggi tutto</summary><div class="txt">${resto.map(p => `<p>${esc(p)}</p>`).join('')}</div></details>` : '') + '</div>';
+  // descrizione già tutta aperta, senza «Leggi tutto»
+  const desc = `<div class="desc">${[primo ?? '', ...resto].map(p => `<p>${esc(p)}</p>`).join('')}</div>`;
   s = sostituisci(s, /<div class="desc">[\s\S]*?<\/details><\/div>/, desc, 'descrizione');
   // l'agente sta sotto la card grigia del prezzo, con le iniziali e senza foto
   const agente = `<div class="card im-agente-lato"><div class="im-chi"><span class="im-cerchio" aria-hidden="true">${esc(iniziali(a.nome))}</span><div><p class="h3">${esc(a.nome)}</p><p class="small">${esc(a.ruolo)}</p></div></div><p>Ti richiama per fissare giorno e ora della visita. In visita puoi chiedere tutto, anche quello che nell’annuncio non c’è.</p><div class="azioni">${tel}<a class="btn alt" href="${esc(a.pagina)}">Apri la sua pagina</a></div></div>`;
