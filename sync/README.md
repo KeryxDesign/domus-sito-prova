@@ -29,8 +29,9 @@ Aggiornamento quando Luana pubblica: il sito si ricostruisce già due volte al g
 
 ## Copia su Hostinger
 
-La stessa build può caricare il sito anche su Hostinger (job `hostinger` della GitHub Action), così il sito di prova e WordPress stanno sullo stesso hosting. La build resta su GitHub: la chiave onOffice non arriva mai su Hostinger, ci arriva solo il sito già pronto.
+La stessa build carica il sito anche su `domus.keryxdesign.com` (Hostinger Keryx, job `hostinger` della GitHub Action), con l'API di Hostinger (`hostinger.mjs`). La build resta su GitHub: la chiave onOffice non arriva mai su Hostinger, ci arriva solo il sito già pronto.
 
-- Si accende con la variabile `HOSTINGER_ATTIVO = si`. Secrets: `HOSTINGER_FTP_HOST`, `HOSTINGER_FTP_UTENTE`, `HOSTINGER_FTP_PASSWORD`. Variabile `HOSTINGER_CARTELLA` (per un sottodominio di solito `domains/<sottodominio>/public_html`).
-- Su Hostinger va con i dati finti. Gli immobili veri ci vanno solo con `ONOFFICE_HOSTINGER = si`, da accendere dopo l'ok di DomuSync (l'Allegato III parla di GitHub Pages e Actions).
-- La protezione con password si mette dal pannello Hostinger (cartella protetta): il caricamento non tocca `.htaccess` e `.htpasswd`.
+- Serve solo il Secret `HOSTINGER_API_TOKEN` (token API creato in hPanel). Senza, il job salta la copia.
+- WordPress sta su `contenuti.keryxdesign.com`, installato da Hostinger nella cartella `/cms`: l'API è `https://contenuti.keryxdesign.com/cms/wp-json/wp/v2`, già di serie nella build (si cambia con la variabile `WORDPRESS_API`). Se WordPress non risponde, la build va avanti con le pagine come in `docs/`.
+- Le case vere seguono lo stesso interruttore `ONOFFICE_ATTIVO` di Pages: DomuSync ha dato l'ok anche per Hostinger (Davide, 15/10/2026).
+- Il dominio si cambia con la variabile `HOSTINGER_DOMINIO`.

@@ -51,35 +51,34 @@ jobs:
         env:
           ONOFFICE_TOKEN: ${{ vars.ONOFFICE_ATTIVO == 'si' && secrets.ONOFFICE_TOKEN || '' }}
           ONOFFICE_SECRET: ${{ vars.ONOFFICE_ATTIVO == 'si' && secrets.ONOFFICE_SECRET || '' }}
-          WORDPRESS_API: ${{ vars.WORDPRESS_API }}
+          WORDPRESS_API: ${{ vars.WORDPRESS_API || 'https://contenuti.keryxdesign.com/cms/wp-json/wp/v2' }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with: { path: _site }
       - id: deploy
         uses: actions/deploy-pages@v4
 
-  # Copia del sito di prova su Hostinger (Keryx). Si accende con la variabile HOSTINGER_ATTIVO = si.
-  # Su Hostinger va con i dati finti: gli immobili veri ci vanno solo con ONOFFICE_HOSTINGER = si, dopo l'ok di DomuSync.
-  # Credenziali FTP solo nei Secrets HOSTINGER_FTP_HOST, HOSTINGER_FTP_UTENTE, HOSTINGER_FTP_PASSWORD; cartella nella variabile HOSTINGER_CARTELLA.
+  # Copia del sito di prova su Hostinger (Keryx), su domus.keryxdesign.com. Si carica con l'API di Hostinger (sync/hostinger.mjs).
+  # Parte solo se c'è il Secret HOSTINGER_API_TOKEN. Le case vere seguono lo stesso interruttore ONOFFICE_ATTIVO di Pages (ok di DomuSync dato a Davide).
   hostinger:
-    if: ${{ vars.HOSTINGER_ATTIVO == 'si' && !(github.event_name == 'workflow_dispatch' && inputs.verifica) }}
+    if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.verifica) }}
     runs-on: ubuntu-latest
     concurrency: { group: hostinger, cancel-in-progress: false }
+    env:
+      HOSTINGER_API_TOKEN: ${{ secrets.HOSTINGER_API_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - if: ${{ env.HOSTINGER_API_TOKEN == '' }}
+        run: echo "Manca il Secret HOSTINGER_API_TOKEN, niente copia su Hostinger."
+      - if: ${{ env.HOSTINGER_API_TOKEN != '' }}
+        uses: actions/checkout@v4
+      - if: ${{ env.HOSTINGER_API_TOKEN != '' }}
+        uses: actions/setup-node@v4
         with: { node-version: 22 }
-      - run: node sync/genera.mjs
+      - if: ${{ env.HOSTINGER_API_TOKEN != '' }}
+        run: node sync/genera.mjs
         env:
-          ONOFFICE_TOKEN: ${{ vars.ONOFFICE_ATTIVO == 'si' && vars.ONOFFICE_HOSTINGER == 'si' && secrets.ONOFFICE_TOKEN || '' }}
-          ONOFFICE_SECRET: ${{ vars.ONOFFICE_ATTIVO == 'si' && vars.ONOFFICE_HOSTINGER == 'si' && secrets.ONOFFICE_SECRET || '' }}
-          WORDPRESS_API: ${{ vars.WORDPRESS_API }}
-      - run: sudo apt-get -qq install -y lftp >/dev/null
-      - name: Carica su Hostinger (FTPS)
-        env:
-          HOST: ${{ secrets.HOSTINGER_FTP_HOST }}
-          UTENTE: ${{ secrets.HOSTINGER_FTP_UTENTE }}
-          PASSWORD: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
-          CARTELLA: ${{ vars.HOSTINGER_CARTELLA }}
-        run: |
-          lftp -u "$UTENTE","$PASSWORD" "$HOST" -e "set ftp:ssl-force true; set ssl:verify-certificate true; mirror -R --delete --parallel=4 --exclude-glob .htaccess --exclude-glob .htpasswd _site/ ${CARTELLA:-public_html}/; quit"
+          ONOFFICE_TOKEN: ${{ vars.ONOFFICE_ATTIVO == 'si' && secrets.ONOFFICE_TOKEN || '' }}
+          ONOFFICE_SECRET: ${{ vars.ONOFFICE_ATTIVO == 'si' && secrets.ONOFFICE_SECRET || '' }}
+          WORDPRESS_API: ${{ vars.WORDPRESS_API || 'https://contenuti.keryxdesign.com/cms/wp-json/wp/v2' }}
+      - if: ${{ env.HOSTINGER_API_TOKEN != '' }}
+        run: node sync/hostinger.mjs ${{ vars.HOSTINGER_DOMINIO || 'domus.keryxdesign.com' }}
