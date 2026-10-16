@@ -58,7 +58,7 @@ jobs:
       - id: deploy
         uses: actions/deploy-pages@v4
 
-  # Copia del sito di prova su Hostinger (Keryx), su indirizzo di prova lightseagreen-loris-512916.hostingersite.com. Si carica con l'API di Hostinger (sync/hostinger.mjs).
+  # Copia del sito di prova su Hostinger (Keryx), su indirizzo di prova darkslategray-scorpion-230635.hostingersite.com, insieme a WordPress in /cms. Si carica con l'API di Hostinger (sync/hostinger.mjs).
   # Parte solo se c'è il Secret HOSTINGER_API_TOKEN. Le case vere seguono lo stesso interruttore ONOFFICE_ATTIVO di Pages (ok di DomuSync dato a Davide).
   hostinger:
     if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.verifica) }}
@@ -81,4 +81,4 @@ jobs:
           ONOFFICE_SECRET: ${{ vars.ONOFFICE_ATTIVO == 'si' && secrets.ONOFFICE_SECRET || '' }}
           WORDPRESS_API: ${{ vars.WORDPRESS_API || 'https://darkslategray-scorpion-230635.hostingersite.com/cms/wp-json/wp/v2' }}
       - if: ${{ env.HOSTINGER_API_TOKEN != '' }}
-        run: node sync/hostinger.mjs ${{ vars.HOSTINGER_DOMINIO || 'lightseagreen-loris-512916.hostingersite.com' }}
+        run: node sync/hostinger.mjs ${{ vars.HOSTINGER_DOMINIO || 'darkslategray-scorpion-230635.hostingersite.com' }}

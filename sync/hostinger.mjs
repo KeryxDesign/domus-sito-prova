@@ -1,9 +1,8 @@
 // Mette online _site/ sul sito di prova su Hostinger con l'API ufficiale (https://developers.hostinger.com).
-//   node sync/hostinger.mjs <dominio>     per esempio lightseagreen-loris-512916.hostingersite.com
+//   node sync/hostinger.mjs <dominio>     per esempio darkslategray-scorpion-230635.hostingersite.com (sito + WordPress in /cms)
 // Il token arriva solo dal Secret HOSTINGER_API_TOKEN e non si stampa mai. Il repo è pubblico e i log delle Action
 // si vedono: si stampano solo dominio, esito e dimensione; utente e chiavi di caricamento si mascherano.
-import { readFileSync, statSync, rmSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -32,21 +31,34 @@ async function pubblica(dominio) {
   const sito = (Array.isArray(d) ? d : d.data ?? []).find(s => s.domain === dominio);
   if (!sito) throw new Error(`${dominio}: sito non trovato su Hostinger.`);
   maschera(sito.username);
-  const archivio = join(RADICE, 'sito.zip');
-  rmSync(archivio, { force: true });
-  execFileSync('zip', ['-qr', archivio, '.'], { cwd: join(RADICE, '_site') });
-  const dim = statSync(archivio).size;
+  // Il sito sta nella radice dello stesso sito Hostinger che ha WordPress in /cms: si caricano i file uno per uno,
+  // senza il deploy dell'archivio, così /cms e il .htaccess di Hostinger restano come sono.
+  const file = elenca(join(RADICE, '_site'));
   const su = await api('POST', '/files/upload-urls', { username: sito.username, domain: dominio });
   maschera(su.auth_key); maschera(su.rest_auth_key);
   const h = { 'X-Auth': su.auth_key, 'X-Auth-Rest': su.rest_auth_key, 'Tus-Resumable': '1.0.0' };
-  const dest = `${su.url.replace(/\/+$/, '')}/sito.zip?override=true`;
-  let r = await fetch(dest, { method: 'POST', headers: { ...h, 'Upload-Length': String(dim), 'Upload-Offset': '0' } });
-  if (r.status !== 201) throw new Error(`Caricamento non avviato (${r.status}).`);
-  r = await fetch(dest, { method: 'PATCH', headers: { ...h, 'Content-Type': 'application/offset+octet-stream', 'Upload-Offset': '0' }, body: readFileSync(archivio) });
-  if (r.status !== 204 || Number(r.headers.get('upload-offset')) !== dim) throw new Error(`Caricamento incompleto (${r.status}).`);
-  await api('POST', `/accounts/${sito.username}/websites/${dominio}/deploy`, { archive_path: 'sito.zip' });
-  rmSync(archivio, { force: true });
-  console.log(`${dominio}: pubblicato (${Math.round(dim / 1024)} KB).`);
+  const base = su.url.replace(/\/+$/, '');
+  let byte = 0;
+  const carica = async rel => {
+    const dati = readFileSync(join(RADICE, '_site', rel));
+    const dest = `${base}/${rel.split('/').map(encodeURIComponent).join('/')}?override=true`;
+    for (let prova = 1; ; prova++) {
+      try {
+        let r = await fetch(dest, { method: 'POST', headers: { ...h, 'Upload-Length': String(dati.length), 'Upload-Offset': '0' } });
+        if (r.status !== 201) throw new Error(`avvio ${r.status}`);
+        r = await fetch(dest, { method: 'PATCH', headers: { ...h, 'Content-Type': 'application/offset+octet-stream', 'Upload-Offset': '0' }, body: dati });
+        if (r.status !== 204) throw new Error(`invio ${r.status}`);
+        byte += dati.length; return;
+      } catch (e) { if (prova >= 3) throw new Error(`${rel}: caricamento non riuscito (${e.message}).`); }
+    }
+  };
+  for (let i = 0; i < file.length; i += 6) await Promise.all(file.slice(i, i + 6).map(carica));
+  console.log(`${dominio}: pubblicati ${file.length} file (${Math.round(byte / 1024)} KB).`);
+}
+
+function elenca(cartella, pre = '') {
+  return readdirSync(join(cartella, pre), { withFileTypes: true }).flatMap(d =>
+    d.isDirectory() ? elenca(cartella, join(pre, d.name)) : d.name === '.DS_Store' ? [] : [join(pre, d.name)]);
 }
 
 pubblica(process.argv[2]).catch(e => { console.error(e.message); process.exit(1); });
