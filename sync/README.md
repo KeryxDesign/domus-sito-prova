@@ -29,9 +29,10 @@ Aggiornamento quando Luana pubblica: il sito si ricostruisce già due volte al g
 
 ## Copia su Hostinger
 
-La stessa build carica il sito anche su `lightseagreen-loris-512916.hostingersite.com` (Hostinger Keryx, job `hostinger` della GitHub Action), con l'API di Hostinger (`hostinger.mjs`). La build resta su GitHub: la chiave onOffice non arriva mai su Hostinger, ci arriva solo il sito già pronto.
+La stessa build carica il sito anche su `darkslategray-scorpion-230635.hostingersite.com` (Hostinger Keryx, job `hostinger` della GitHub Action), con l'API di Hostinger (`hostinger.mjs`). La build resta su GitHub: la chiave onOffice non arriva mai su Hostinger, ci arriva solo il sito già pronto.
 
 - Serve solo il Secret `HOSTINGER_API_TOKEN` (token API creato in hPanel). Senza, il job salta la copia.
-- WordPress sta su `darkslategray-scorpion-230635.hostingersite.com`, installato da Hostinger nella cartella `/cms`: l'API è `https://darkslategray-scorpion-230635.hostingersite.com/cms/wp-json/wp/v2`, già di serie nella build (si cambia con la variabile `WORDPRESS_API`). Se WordPress non risponde, la build va avanti con le pagine come in `docs/`.
+- Sito e WordPress stanno sullo stesso indirizzo: il sito nella radice, WordPress nella cartella `/cms` (Luana entra da `/cms/wp-admin`). I file si caricano uno per uno, senza toccare `/cms` né il `.htaccess` di Hostinger; le pagine di case non più in vendita restano sul server finché non si tolgono a mano.
+- WordPress: l'API è `https://darkslategray-scorpion-230635.hostingersite.com/cms/wp-json/wp/v2`, già di serie nella build (si cambia con la variabile `WORDPRESS_API`). Se WordPress non risponde, la build va avanti con le pagine come in `docs/`.
 - Le case vere seguono lo stesso interruttore `ONOFFICE_ATTIVO` di Pages: DomuSync ha dato l'ok anche per Hostinger (Davide, 15/10/2026).
 - Il dominio si cambia con la variabile `HOSTINGER_DOMINIO`.
