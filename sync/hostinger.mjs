@@ -1,5 +1,5 @@
 // Mette online _site/ sul sito di prova su Hostinger con l'API ufficiale (https://developers.hostinger.com).
-//   node sync/hostinger.mjs <dominio>     per esempio domus.keryxdesign.com
+//   node sync/hostinger.mjs <dominio>     per esempio lightseagreen-loris-512916.hostingersite.com
 // Il token arriva solo dal Secret HOSTINGER_API_TOKEN e non si stampa mai. Il repo è pubblico e i log delle Action
 // si vedono: si stampano solo dominio, esito e dimensione; utente e chiavi di caricamento si mascherano.
 import { readFileSync, statSync, rmSync } from 'node:fs';
