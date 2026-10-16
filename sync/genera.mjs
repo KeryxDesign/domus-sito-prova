@@ -206,8 +206,11 @@ function domandeFrequenti(s, faq) {
 
 async function contenutiWordPress(prova) {
   const base = wp.indirizzo();
-  const c = prova ? json('contenuti-prova.json') : base ? await wp.contenuti(base) : null;
-  if (!c) { console.log('Articoli e domande: nessun WordPress collegato, pagine lasciate come in docs/.'); return; }
+  let c = null;
+  try { c = prova ? json('contenuti-prova.json') : base ? await wp.contenuti(base) : null; }
+  // se WordPress non risponde il sito si costruisce lo stesso, con le pagine come in docs/
+  catch (e) { console.log(`WordPress non raggiungibile (${e.message}): articoli e domande restano come in docs/.`); }
+  if (!c) { if (!base || prova) console.log('Articoli e domande: nessun WordPress collegato, pagine lasciate come in docs/.'); return; }
   const arts = c.articoli.filter(a => a.slug && a.titolo);
   if (arts.length) {
     const modello = leggi('2-13-articolo.dc.html');
