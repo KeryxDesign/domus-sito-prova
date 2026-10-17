@@ -357,7 +357,7 @@ async function main() {
     scrivi(f, sostituisci(leggi(f), griglia, `<div class="grid c3">${imports(ns)}</div>`, `griglia di ${f}`));
   }
   await contenutiWordPress(args.includes('--contenuti-prova'));
-  for (const js of ['testi-luana.js', 'galleria-immobile.js', 'modulo-agente.js']) versioneScript(js);
+  for (const js of ['testi-luana.js', 'galleria-immobile.js', 'modulo-agente.js', 'alterna-sfondi.js']) versioneScript(js);
   console.log(`Pagine immobile: ${elenco.length}. Per sede: ${Object.entries(conteggioSedi).map(([k, v]) => `${k} ${v}`).join(', ')}. Senza agente in agenti.json: ${elenco.filter(e => !agenti[e.agente]).length}`);
 }
 
