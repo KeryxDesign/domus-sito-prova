@@ -185,7 +185,7 @@ function paginaImmobile(modello, e, n, tutti, agenti) {
 
 function paginaDiAgente(modello, k, a, ns) {
   let s = modello;
-  s = sostituisci(s, /<title>[^<]*<\/title>/, `<title>${esc(a.nome)} · Domus Real Estate</title>`, 'title della 2-09');
+  s = sostituisci(s, /<title>[^<]*<\/title>/, `<title>${esc(k === '_predefinito' ? 'Scrivi all’agenzia' : a.nome)} · Domus Real Estate</title>`, 'title della 2-09');
   s = sostituisci(s, /<div class="im-iniziali" aria-hidden="true">[^<]*<\/div><div class="st"><h1>[^<]*<\/h1><p class="lead">[^<]*<\/p>/,
     `<div class="im-iniziali" aria-hidden="true">${esc(iniziali(a.nome))}</div><div class="st"><h1>${esc(a.nome)}</h1><p class="lead">${esc(a.ruolo)}</p>`, 'testata della 2-09');
   s = ns.length ? sostituisci(s, griglia, `<div class="grid c3">${imports(ns)}</div>`, 'case della 2-09')
