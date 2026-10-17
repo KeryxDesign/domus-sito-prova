@@ -33,14 +33,16 @@ async function pubblica(dominio) {
   maschera(sito.username);
   // Il sito sta nella radice dello stesso sito Hostinger che ha WordPress in /cms: si caricano i file uno per uno,
   // senza il deploy dell'archivio, così /cms e il .htaccess di Hostinger restano come sono.
-  const file = elenca(join(RADICE, '_site'));
+  // più il plugin delle sezioni di WordPress (wordpress/ nel repo va in cms/wp-content/ sul server)
+  const file = [...elenca(join(RADICE, '_site')).map(rel => [join(RADICE, '_site', rel), rel]),
+    ...elenca(join(RADICE, 'wordpress')).map(rel => [join(RADICE, 'wordpress', rel), `cms/wp-content/${rel}`])];
   const su = await api('POST', '/files/upload-urls', { username: sito.username, domain: dominio });
   maschera(su.auth_key); maschera(su.rest_auth_key);
   const h = { 'X-Auth': su.auth_key, 'X-Auth-Rest': su.rest_auth_key, 'Tus-Resumable': '1.0.0' };
   const base = su.url.replace(/\/+$/, '');
   let byte = 0;
-  const carica = async rel => {
-    const dati = readFileSync(join(RADICE, '_site', rel));
+  const carica = async ([sorgente, rel]) => {
+    const dati = readFileSync(sorgente);
     const dest = `${base}/${rel.split('/').map(encodeURIComponent).join('/')}?override=true`;
     for (let prova = 1; ; prova++) {
       try {

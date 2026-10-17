@@ -1,119 +1,151 @@
 {
- "_nota": "Contenuti di prova per vedere la pagina senza WordPress (node sync/genera.mjs --contenuti-prova). Titoli e sommari ripresi dal prototipo, corpi tutti di prova.",
- "articoli": [
-  {
-   "slug": "quanto-vale-davvero-la-tua-casa-come-si-fa-una-valutazione-scritta",
-   "titolo": "Quanto vale davvero la tua casa: come si fa una valutazione scritta",
-   "sommario": "Confronto con le case vendute in zona, stato dell’immobile, piano e condominio. Ecco cosa entra nel conto, voce per voce.",
-   "data": "2026-10-14T09:00:00",
-   "autore": "Autore di prova",
-   "categoria": "Vendere",
-   "minuti": 5,
-   "foto": "https://img.magnific.com/free-photo/front-view-smiley-female-realtor-empty-house-holding-clipboard_23-2148895447.jpg",
-   "fotoAlt": "",
-   "html": "<p>Testo di prova. Qui va il primo paragrafo scritto in WordPress.</p><h2>Intertitolo di prova</h2><p>Testo di prova. Gli intertitoli sono i Titoli H2 dell'editor.</p><figure class=\"wp-block-image\"><img src=\"https://img.magnific.com/free-photo/front-view-smiley-female-realtor-empty-house-holding-clipboard_23-2148895447.jpg\" alt=\"\"><figcaption>Didascalia di prova</figcaption></figure><h2>Secondo intertitolo di prova</h2><ul><li>Elenco di prova</li><li>Seconda voce</li></ul><p>Testo di prova.</p>"
-  },
-  {
-   "slug": "i-documenti-da-preparare-prima-di-mettere-in-vendita",
-   "titolo": "I documenti da preparare prima di mettere in vendita",
-   "sommario": "Atto di provenienza, planimetria, APE, conformità urbanistica: cosa serve, dove si chiede e quanto tempo ci vuole.",
-   "data": "2026-10-13T09:00:00",
-   "autore": "Autore di prova",
-   "categoria": "Vendere",
-   "minuti": 6,
-   "foto": "https://img.magnific.com/free-photo/overhead-view-human-hand-putting-signature-official-paper-office_23-2148182971.jpg",
-   "fotoAlt": "",
-   "html": "<p>Testo di prova. Qui va il primo paragrafo scritto in WordPress.</p><h2>Intertitolo di prova</h2><p>Testo di prova. Gli intertitoli sono i Titoli H2 dell'editor.</p><figure class=\"wp-block-image\"><img src=\"https://img.magnific.com/free-photo/front-view-smiley-female-realtor-empty-house-holding-clipboard_23-2148895447.jpg\" alt=\"\"><figcaption>Didascalia di prova</figcaption></figure><h2>Secondo intertitolo di prova</h2><ul><li>Elenco di prova</li><li>Seconda voce</li></ul><p>Testo di prova.</p>"
-  },
-  {
-   "slug": "perche-alzare-il-prezzo-per-trattare-allunga-i-tempi",
-   "titolo": "Perché alzare il prezzo «per trattare» allunga i tempi",
-   "sommario": "Una casa sopra il prezzo di mercato riceve meno visite nelle prime settimane, quelle che contano di più.",
-   "data": "2026-10-12T09:00:00",
-   "autore": "Autore di prova",
-   "categoria": "Vendere",
-   "minuti": 4,
-   "foto": "https://img.magnific.com/free-photo/real-estate-paper-finance-budgeting-concept_53876-127086.jpg",
-   "fotoAlt": "",
-   "html": "<p>Testo di prova. Qui va il primo paragrafo scritto in WordPress.</p><h2>Intertitolo di prova</h2><p>Testo di prova. Gli intertitoli sono i Titoli H2 dell'editor.</p><figure class=\"wp-block-image\"><img src=\"https://img.magnific.com/free-photo/front-view-smiley-female-realtor-empty-house-holding-clipboard_23-2148895447.jpg\" alt=\"\"><figcaption>Didascalia di prova</figcaption></figure><h2>Secondo intertitolo di prova</h2><ul><li>Elenco di prova</li><li>Seconda voce</li></ul><p>Testo di prova.</p>"
-  },
-  {
-   "slug": "prima-casa-le-agevolazioni-fiscali-spiegate-semplici",
-   "titolo": "Prima casa: le agevolazioni fiscali spiegate semplici",
-   "sommario": "Imposta di registro ridotta, credito d’imposta, requisiti e scadenze da rispettare per non perderle.",
-   "data": "2026-10-11T09:00:00",
-   "autore": "Autore di prova",
-   "categoria": "Comprare",
-   "minuti": 7,
-   "foto": "https://img.magnific.com/free-photo/close-up-house-keys-blueprint-new-home-spiral-notebook-wooden-textured-backdrop_23-2148038646.jpg",
-   "fotoAlt": "",
-   "html": "<p>Testo di prova. Qui va il primo paragrafo scritto in WordPress.</p><h2>Intertitolo di prova</h2><p>Testo di prova. Gli intertitoli sono i Titoli H2 dell'editor.</p><figure class=\"wp-block-image\"><img src=\"https://img.magnific.com/free-photo/front-view-smiley-female-realtor-empty-house-holding-clipboard_23-2148895447.jpg\" alt=\"\"><figcaption>Didascalia di prova</figcaption></figure><h2>Secondo intertitolo di prova</h2><ul><li>Elenco di prova</li><li>Seconda voce</li></ul><p>Testo di prova.</p>"
-  },
-  {
-   "slug": "proposta-d-acquisto-e-compromesso-cosa-firmi-e-quando",
-   "titolo": "Proposta d’acquisto e compromesso: cosa firmi, e quando",
-   "sommario": "Le differenze tra i due documenti, la caparra, e cosa succede se qualcuno si tira indietro.",
-   "data": "2026-10-10T09:00:00",
-   "autore": "Autore di prova",
-   "categoria": "Comprare",
-   "minuti": 6,
-   "foto": "https://img.magnific.com/free-photo/closeup-contract-table-couple-taking-mortgage-loan_1163-4194.jpg",
-   "fotoAlt": "",
-   "html": "<p>Testo di prova. Qui va il primo paragrafo scritto in WordPress.</p><h2>Intertitolo di prova</h2><p>Testo di prova. Gli intertitoli sono i Titoli H2 dell'editor.</p><figure class=\"wp-block-image\"><img src=\"https://img.magnific.com/free-photo/front-view-smiley-female-realtor-empty-house-holding-clipboard_23-2148895447.jpg\" alt=\"\"><figcaption>Didascalia di prova</figcaption></figure><h2>Secondo intertitolo di prova</h2><ul><li>Elenco di prova</li><li>Seconda voce</li></ul><p>Testo di prova.</p>"
-  },
-  {
-   "slug": "il-mutuo-prima-della-casa-perche-chiedere-la-pre-delibera",
-   "titolo": "Il mutuo prima della casa: perché chiedere la pre-delibera",
-   "sommario": "Sapere quanto ti presta la banca prima di cercare evita di innamorarsi di una casa fuori budget.",
-   "data": "2026-10-09T09:00:00",
-   "autore": "Autore di prova",
-   "categoria": "Comprare",
-   "minuti": 5,
-   "foto": "https://img.magnific.com/free-photo/arranged-approved-mortgage-request-key_23-2147764195.jpg",
-   "fotoAlt": "",
-   "html": "<p>Testo di prova. Qui va il primo paragrafo scritto in WordPress.</p><h2>Intertitolo di prova</h2><p>Testo di prova. Gli intertitoli sono i Titoli H2 dell'editor.</p><figure class=\"wp-block-image\"><img src=\"https://img.magnific.com/free-photo/front-view-smiley-female-realtor-empty-house-holding-clipboard_23-2148895447.jpg\" alt=\"\"><figcaption>Didascalia di prova</figcaption></figure><h2>Secondo intertitolo di prova</h2><ul><li>Elenco di prova</li><li>Seconda voce</li></ul><p>Testo di prova.</p>"
-  }
- ],
- "faq": {
-  "titolo": "Domande e risposte (prova)",
-  "intro": "Testo di prova: in WordPress è il paragrafo prima del primo titolo.",
-  "gruppi": [
-   {
-    "id": "chi-vende",
-    "titolo": "Per chi vende",
-    "voci": [
-     {
-      "domanda": "Domanda di prova 1 per chi vende",
-      "risposta": "<p>Risposta di prova. In WordPress ogni domanda è un blocco Dettagli.</p>"
-     },
-     {
-      "domanda": "Domanda di prova 2 per chi vende",
-      "risposta": "<p>Risposta di prova. In WordPress ogni domanda è un blocco Dettagli.</p>"
-     },
-     {
-      "domanda": "Domanda di prova 3 per chi vende",
-      "risposta": "<p>Risposta di prova. In WordPress ogni domanda è un blocco Dettagli.</p>"
-     }
+  "_nota": "Contenuti di prova per vedere la pagina senza WordPress (node sync/genera.mjs --contenuti-prova). Titoli e sommari ripresi dal prototipo, corpi tutti di prova.",
+  "articoli": [
+    {
+      "slug": "quanto-vale-davvero-la-tua-casa-come-si-fa-una-valutazione-scritta",
+      "titolo": "Quanto vale davvero la tua casa: come si fa una valutazione scritta",
+      "sommario": "Confronto con le case vendute in zona, stato dell’immobile, piano e condominio. Ecco cosa entra nel conto, voce per voce.",
+      "data": "2026-10-14T09:00:00",
+      "autore": "Autore di prova",
+      "categoria": "Vendere",
+      "minuti": 5,
+      "foto": "https://img.magnific.com/free-photo/front-view-smiley-female-realtor-empty-house-holding-clipboard_23-2148895447.jpg",
+      "fotoAlt": "",
+      "html": "<p>Testo di prova. Qui va il primo paragrafo scritto in WordPress.</p><h2>Intertitolo di prova</h2><p>Testo di prova. Gli intertitoli sono i Titoli H2 dell'editor.</p><figure class=\"wp-block-image\"><img src=\"https://img.magnific.com/free-photo/front-view-smiley-female-realtor-empty-house-holding-clipboard_23-2148895447.jpg\" alt=\"\"><figcaption>Didascalia di prova</figcaption></figure><h2>Secondo intertitolo di prova</h2><ul><li>Elenco di prova</li><li>Seconda voce</li></ul><p>Testo di prova.</p>"
+    },
+    {
+      "slug": "i-documenti-da-preparare-prima-di-mettere-in-vendita",
+      "titolo": "I documenti da preparare prima di mettere in vendita",
+      "sommario": "Atto di provenienza, planimetria, APE, conformità urbanistica: cosa serve, dove si chiede e quanto tempo ci vuole.",
+      "data": "2026-10-13T09:00:00",
+      "autore": "Autore di prova",
+      "categoria": "Vendere",
+      "minuti": 6,
+      "foto": "https://img.magnific.com/free-photo/overhead-view-human-hand-putting-signature-official-paper-office_23-2148182971.jpg",
+      "fotoAlt": "",
+      "html": "<p>Testo di prova. Qui va il primo paragrafo scritto in WordPress.</p><h2>Intertitolo di prova</h2><p>Testo di prova. Gli intertitoli sono i Titoli H2 dell'editor.</p><figure class=\"wp-block-image\"><img src=\"https://img.magnific.com/free-photo/front-view-smiley-female-realtor-empty-house-holding-clipboard_23-2148895447.jpg\" alt=\"\"><figcaption>Didascalia di prova</figcaption></figure><h2>Secondo intertitolo di prova</h2><ul><li>Elenco di prova</li><li>Seconda voce</li></ul><p>Testo di prova.</p>"
+    },
+    {
+      "slug": "perche-alzare-il-prezzo-per-trattare-allunga-i-tempi",
+      "titolo": "Perché alzare il prezzo «per trattare» allunga i tempi",
+      "sommario": "Una casa sopra il prezzo di mercato riceve meno visite nelle prime settimane, quelle che contano di più.",
+      "data": "2026-10-12T09:00:00",
+      "autore": "Autore di prova",
+      "categoria": "Vendere",
+      "minuti": 4,
+      "foto": "https://img.magnific.com/free-photo/real-estate-paper-finance-budgeting-concept_53876-127086.jpg",
+      "fotoAlt": "",
+      "html": "<p>Testo di prova. Qui va il primo paragrafo scritto in WordPress.</p><h2>Intertitolo di prova</h2><p>Testo di prova. Gli intertitoli sono i Titoli H2 dell'editor.</p><figure class=\"wp-block-image\"><img src=\"https://img.magnific.com/free-photo/front-view-smiley-female-realtor-empty-house-holding-clipboard_23-2148895447.jpg\" alt=\"\"><figcaption>Didascalia di prova</figcaption></figure><h2>Secondo intertitolo di prova</h2><ul><li>Elenco di prova</li><li>Seconda voce</li></ul><p>Testo di prova.</p>"
+    },
+    {
+      "slug": "prima-casa-le-agevolazioni-fiscali-spiegate-semplici",
+      "titolo": "Prima casa: le agevolazioni fiscali spiegate semplici",
+      "sommario": "Imposta di registro ridotta, credito d’imposta, requisiti e scadenze da rispettare per non perderle.",
+      "data": "2026-10-11T09:00:00",
+      "autore": "Autore di prova",
+      "categoria": "Comprare",
+      "minuti": 7,
+      "foto": "https://img.magnific.com/free-photo/close-up-house-keys-blueprint-new-home-spiral-notebook-wooden-textured-backdrop_23-2148038646.jpg",
+      "fotoAlt": "",
+      "html": "<p>Testo di prova. Qui va il primo paragrafo scritto in WordPress.</p><h2>Intertitolo di prova</h2><p>Testo di prova. Gli intertitoli sono i Titoli H2 dell'editor.</p><figure class=\"wp-block-image\"><img src=\"https://img.magnific.com/free-photo/front-view-smiley-female-realtor-empty-house-holding-clipboard_23-2148895447.jpg\" alt=\"\"><figcaption>Didascalia di prova</figcaption></figure><h2>Secondo intertitolo di prova</h2><ul><li>Elenco di prova</li><li>Seconda voce</li></ul><p>Testo di prova.</p>"
+    },
+    {
+      "slug": "proposta-d-acquisto-e-compromesso-cosa-firmi-e-quando",
+      "titolo": "Proposta d’acquisto e compromesso: cosa firmi, e quando",
+      "sommario": "Le differenze tra i due documenti, la caparra, e cosa succede se qualcuno si tira indietro.",
+      "data": "2026-10-10T09:00:00",
+      "autore": "Autore di prova",
+      "categoria": "Comprare",
+      "minuti": 6,
+      "foto": "https://img.magnific.com/free-photo/closeup-contract-table-couple-taking-mortgage-loan_1163-4194.jpg",
+      "fotoAlt": "",
+      "html": "<p>Testo di prova. Qui va il primo paragrafo scritto in WordPress.</p><h2>Intertitolo di prova</h2><p>Testo di prova. Gli intertitoli sono i Titoli H2 dell'editor.</p><figure class=\"wp-block-image\"><img src=\"https://img.magnific.com/free-photo/front-view-smiley-female-realtor-empty-house-holding-clipboard_23-2148895447.jpg\" alt=\"\"><figcaption>Didascalia di prova</figcaption></figure><h2>Secondo intertitolo di prova</h2><ul><li>Elenco di prova</li><li>Seconda voce</li></ul><p>Testo di prova.</p>"
+    },
+    {
+      "slug": "il-mutuo-prima-della-casa-perche-chiedere-la-pre-delibera",
+      "titolo": "Il mutuo prima della casa: perché chiedere la pre-delibera",
+      "sommario": "Sapere quanto ti presta la banca prima di cercare evita di innamorarsi di una casa fuori budget.",
+      "data": "2026-10-09T09:00:00",
+      "autore": "Autore di prova",
+      "categoria": "Comprare",
+      "minuti": 5,
+      "foto": "https://img.magnific.com/free-photo/arranged-approved-mortgage-request-key_23-2147764195.jpg",
+      "fotoAlt": "",
+      "html": "<p>Testo di prova. Qui va il primo paragrafo scritto in WordPress.</p><h2>Intertitolo di prova</h2><p>Testo di prova. Gli intertitoli sono i Titoli H2 dell'editor.</p><figure class=\"wp-block-image\"><img src=\"https://img.magnific.com/free-photo/front-view-smiley-female-realtor-empty-house-holding-clipboard_23-2148895447.jpg\" alt=\"\"><figcaption>Didascalia di prova</figcaption></figure><h2>Secondo intertitolo di prova</h2><ul><li>Elenco di prova</li><li>Seconda voce</li></ul><p>Testo di prova.</p>"
+    }
+  ],
+  "faq": {
+    "gruppi": [
+      {
+        "id": "chi-vende",
+        "titolo": "Per chi vende",
+        "voci": [
+          {
+            "domanda": "Domanda di prova 1 per chi vende",
+            "risposta": "<p>Risposta di prova. In WordPress ogni domanda è una voce di Domande frequenti.</p>"
+          },
+          {
+            "domanda": "Domanda di prova 2 per chi vende",
+            "risposta": "<p>Risposta di prova. In WordPress ogni domanda è una voce di Domande frequenti.</p>"
+          },
+          {
+            "domanda": "Domanda di prova 3 per chi vende",
+            "risposta": "<p>Risposta di prova. In WordPress ogni domanda è una voce di Domande frequenti.</p>"
+          }
+        ]
+      },
+      {
+        "id": "chi-compra",
+        "titolo": "Per chi compra",
+        "voci": [
+          {
+            "domanda": "Domanda di prova 1 per chi compra",
+            "risposta": "<p>Risposta di prova.</p>"
+          },
+          {
+            "domanda": "Domanda di prova 2 per chi compra",
+            "risposta": "<p>Risposta di prova.</p>"
+          },
+          {
+            "domanda": "Domanda di prova 3 per chi compra",
+            "risposta": "<p>Risposta di prova.</p>"
+          }
+        ]
+      }
     ]
-   },
-   {
-    "id": "chi-compra",
-    "titolo": "Per chi compra",
-    "voci": [
-     {
-      "domanda": "Domanda di prova 1 per chi compra",
-      "risposta": "<p>Risposta di prova.</p>"
-     },
-     {
-      "domanda": "Domanda di prova 2 per chi compra",
-      "risposta": "<p>Risposta di prova.</p>"
-     },
-     {
-      "domanda": "Domanda di prova 3 per chi compra",
-      "risposta": "<p>Risposta di prova.</p>"
-     }
-    ]
-   }
+  },
+  "venduti": [
+    {
+      "zona": "Zona di prova 1",
+      "tempo": "Venduta in 00 giorni (prova)",
+      "esito": "Riga del risultato di prova",
+      "sede": "treviglio",
+      "foto": "",
+      "fotoAlt": ""
+    },
+    {
+      "zona": "Zona di prova 2",
+      "tempo": "Venduta in 00 giorni (prova)",
+      "esito": "Riga del risultato di prova",
+      "sede": "martinengo",
+      "foto": "",
+      "fotoAlt": ""
+    },
+    {
+      "zona": "Zona di prova 3",
+      "tempo": "Venduta in 00 giorni (prova)",
+      "esito": "Riga del risultato di prova",
+      "sede": "collecchio",
+      "foto": "",
+      "fotoAlt": ""
+    },
+    {
+      "zona": "Zona di prova 4",
+      "tempo": "Venduta in 00 giorni (prova)",
+      "esito": "Riga del risultato di prova",
+      "sede": "treviglio",
+      "foto": "",
+      "fotoAlt": ""
+    }
   ]
- }
 }
