@@ -2,8 +2,8 @@
 //   node sync/genera.mjs             con ONOFFICE_TOKEN e ONOFFICE_SECRET legge onOffice, senza usa sync/dati-finti.json
 //   node sync/genera.mjs --finti     usa sempre i dati finti
 //   node sync/genera.mjs --verifica  stampa solo struttura e conteggi dell'account onOffice, non genera nulla
-//   node sync/genera.mjs --contenuti-prova  articoli, domande e venduti da sync/contenuti-prova.json invece che da WordPress
-// Articoli, domande frequenti e immobili venduti arrivano da WordPress solo se c'è WORDPRESS_API (vedi sync/wordpress.mjs); senza, quelle pagine restano come in docs/.
+//   node sync/genera.mjs --contenuti-prova  articoli, domande, venduti e testimonianze da sync/contenuti-prova.json invece che da WordPress
+// Articoli, domande frequenti, immobili venduti e testimonianze arrivano da WordPress solo se c'è WORDPRESS_API (vedi sync/wordpress.mjs); senza, quelle pagine restano come in docs/.
 // Regole: _site/ non va mai nel repo (è in .gitignore). Il log contiene solo conteggi, mai valori dei record.
 import { readFileSync, writeFileSync, rmSync, cpSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -224,6 +224,41 @@ function venduti(lista) {
     griglia(`2-08-sede-${sede}.dc.html`, '2.8 · 2 3', lista.filter(v => v.sede === sede).slice(0, 6), 'ph r43 ag-da-tablet');
 }
 
+function cardTestimonianza(t) {
+  const foto = t.foto ? `<img src="${esc(t.foto)}" alt="" width="64" height="64" loading="lazy">` : '';
+  return `<figure class="card voce"><span class="stelle" role="img" aria-label="${t.stelle} stelle su 5"><span aria-hidden="true">${'★'.repeat(t.stelle)}</span></span>`
+    + `<blockquote><p>${esc(t.testo)}</p></blockquote><figcaption class="voce-testa"><span class="ph voce-foto">${foto}<span>Foto</span></span>`
+    + `<span class="voce-chi"><span class="voce-nome">${esc(t.nome)}</span>${t.dove ? `<span class="voce-dove">${esc(t.dove)}</span>` : ''}</span></figcaption></figure>`;
+}
+
+// Testimonianze: nella 2-16 tutte, divise tra chi ha venduto e chi ha comprato. La fascia in fondo alle pagine
+// mostra le prime tre: solo "vendere" nella 2-02, solo "comprare" nella 2-03, alternate in home e nelle sedi.
+// Le figure non contengono div, quindi la griglia finisce al primo </div>.
+function testimonianze(lista) {
+  const per = tipo => lista.filter(t => t.tipo === tipo);
+  const v = per('vendere'), c = per('comprare');
+  const f216 = '2-16-testimonianze.dc.html';
+  if (existsSync(join(USCITA, f216))) {
+    let s = leggi(f216);
+    for (const [blocco, voci] of [['2\\.16 · 3"', v], ['2\\.16 · 3-bis"', c]]) {
+      if (!voci.length) continue;
+      s = sostituisci(s, new RegExp(`(data-blocco="${blocco}[\\s\\S]*?<div class="grid c3">)[\\s\\S]*?(\\s*</div>)`),
+        (_, a, b) => `${a}\n      ${voci.map(cardTestimonianza).join('\n      ')}${b}`, `testimonianze della 2-16 (${blocco})`);
+    }
+    scrivi(f216, s);
+  }
+  const fascia = leggi('FasciaTestimonianze.dc.html');
+  const conVoci = voci => sostituisci(fascia, /(<div class="grid c3">)[\s\S]*?(<\/div>)/, (_, a, b) => `${a}${voci.slice(0, 3).map(cardTestimonianza).join('')}${b}`, 'griglia della FasciaTestimonianze');
+  const alternate = [];
+  for (let i = 0; alternate.length < 3 && (i < v.length || i < c.length); i++) alternate.push(...[v[i], c[i]].filter(Boolean));
+  scrivi('FasciaTestimonianze.dc.html', conVoci(alternate));
+  for (const [nome, voci, pagina] of [['FasciaTestimonianzeVendere', v, '2-02-vendere-casa.dc.html'], ['FasciaTestimonianzeComprare', c, '2-03-comprare-casa.dc.html']]) {
+    if (!voci.length || !existsSync(join(USCITA, pagina))) continue;
+    scrivi(`${nome}.dc.html`, conVoci(voci));
+    scrivi(pagina, sostituisci(leggi(pagina), /<dc-import name="FasciaTestimonianze"/, `<dc-import name="${nome}"`, `fascia testimonianze della ${pagina}`));
+  }
+}
+
 async function contenutiWordPress(prova) {
   const base = wp.indirizzo();
   let c = null;
@@ -243,8 +278,9 @@ async function contenutiWordPress(prova) {
   }
   if (c.faq?.gruppi?.length) scrivi('2-15-domande-e-risposte.dc.html', domandeFrequenti(leggi('2-15-domande-e-risposte.dc.html'), c.faq));
   if (c.venduti?.length) venduti(c.venduti);
-  const nonAttive = [c.faq ? '' : 'domande', c.venduti ? '' : 'venduti'].filter(Boolean);
-  console.log(`Fonte contenuti: ${prova ? 'contenuti di prova' : 'WordPress'}. Articoli: ${arts.length}. Domande: ${(c.faq?.gruppi ?? []).reduce((n, g) => n + g.voci.length, 0)}. Venduti: ${c.venduti?.length ?? 0}${nonAttive.length ? `. Sezioni non ancora attive in WordPress: ${nonAttive.join(', ')}` : ''}`);
+  if (c.testimonianze?.length) testimonianze(c.testimonianze);
+  const nonAttive = [c.faq ? '' : 'domande', c.venduti ? '' : 'venduti', c.testimonianze ? '' : 'testimonianze'].filter(Boolean);
+  console.log(`Fonte contenuti: ${prova ? 'contenuti di prova' : 'WordPress'}. Articoli: ${arts.length}. Domande: ${(c.faq?.gruppi ?? []).reduce((n, g) => n + g.voci.length, 0)}. Venduti: ${c.venduti?.length ?? 0}. Testimonianze: ${c.testimonianze?.length ?? 0}${nonAttive.length ? `. Sezioni non ancora attive in WordPress: ${nonAttive.join(', ')}` : ''}`);
 }
 
 async function main() {

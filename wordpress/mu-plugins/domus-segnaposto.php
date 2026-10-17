@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name: Domus, contenuti segnaposto
- * Description: Una sola volta, mette nelle tre sezioni contenuti segnaposto da sostituire: articoli, domande frequenti, immobili venduti.
+ * Description: Una sola volta, mette nelle sezioni contenuti segnaposto da sostituire: articoli, domande frequenti, immobili venduti, testimonianze.
  *
- * Gira al primo caricamento dopo l'installazione e poi non fa più niente (opzione domus_segnaposto_v1).
+ * Gira al primo caricamento dopo l'installazione e poi non fa più niente (opzioni domus_segnaposto_v1 e domus_segnaposto_testimonianze_v1).
  * Se Luana cancella i segnaposto non tornano. Nessun dato vero: numeri a zero, zone indicate solo col comune della sede.
  */
 if (!defined('ABSPATH')) exit;
@@ -63,6 +63,28 @@ add_action('init', function () {
 			update_post_meta($id, 'domus_tempo', 'Venduta in 00 giorni');
 			update_post_meta($id, 'domus_esito', $k === 1 ? 'Prezzo finale 000.000 euro' : 'Chiesti 000.000, presi 000.000');
 			update_post_meta($id, 'domus_sede', $sede);
+		}
+	}
+}, 20);
+
+// Testimonianze: tre per chi ha venduto e tre per chi ha comprato, nomi e testi segnaposto
+add_action('init', function () {
+	if (!post_type_exists('testimonianza') || !add_option('domus_segnaposto_testimonianze_v1', gmdate('c'), '', false)) return;
+	$autore = (int) (get_users(['role' => 'administrator', 'number' => 1, 'fields' => 'ID'])[0] ?? 0);
+	$comuni = ['Treviglio', 'Martinengo', 'Collecchio'];
+	$n = 0;
+	foreach (['vendere' => 'venduto', 'comprare' => 'comprato'] as $tipo => $verbo) {
+		foreach ($comuni as $i => $comune) {
+			$n++;
+			$id = wp_insert_post([
+				'post_type' => 'testimonianza', 'post_status' => 'publish', 'post_author' => $autore, 'menu_order' => $i + 1,
+				'post_title' => "Cliente segnaposto $n",
+				'post_content' => "Testimonianza segnaposto: qui va la recensione di chi ha $verbo casa con Domus.",
+			]);
+			if (!$id || is_wp_error($id)) continue;
+			update_post_meta($id, 'domus_tipo', $tipo);
+			update_post_meta($id, 'domus_dove', $comune);
+			update_post_meta($id, 'domus_stelle', '5');
 		}
 	}
 }, 20);

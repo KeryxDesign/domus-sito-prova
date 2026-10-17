@@ -147,5 +147,55 @@
       "foto": "",
       "fotoAlt": ""
     }
+  ],
+  "testimonianze": [
+    {
+      "nome": "Cliente di prova 1",
+      "testo": "Testimonianza di prova di chi ha venduto casa.",
+      "dove": "Treviglio",
+      "stelle": 5,
+      "tipo": "vendere",
+      "foto": ""
+    },
+    {
+      "nome": "Cliente di prova 2",
+      "testo": "Testimonianza di prova di chi ha venduto casa.",
+      "dove": "Martinengo",
+      "stelle": 5,
+      "tipo": "vendere",
+      "foto": ""
+    },
+    {
+      "nome": "Cliente di prova 3",
+      "testo": "Testimonianza di prova di chi ha venduto casa.",
+      "dove": "Collecchio",
+      "stelle": 5,
+      "tipo": "vendere",
+      "foto": ""
+    },
+    {
+      "nome": "Cliente di prova 1",
+      "testo": "Testimonianza di prova di chi ha comprato casa.",
+      "dove": "Treviglio",
+      "stelle": 5,
+      "tipo": "comprare",
+      "foto": ""
+    },
+    {
+      "nome": "Cliente di prova 2",
+      "testo": "Testimonianza di prova di chi ha comprato casa.",
+      "dove": "Martinengo",
+      "stelle": 5,
+      "tipo": "comprare",
+      "foto": ""
+    },
+    {
+      "nome": "Cliente di prova 3",
+      "testo": "Testimonianza di prova di chi ha comprato casa.",
+      "dove": "Collecchio",
+      "stelle": 5,
+      "tipo": "comprare",
+      "foto": ""
+    }
   ]
 }

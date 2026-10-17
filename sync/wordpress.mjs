@@ -1,12 +1,13 @@
-// Legge articoli, domande frequenti e immobili venduti da un WordPress usato solo come area di scrittura (headless).
+// Legge articoli, domande frequenti, immobili venduti e testimonianze da un WordPress usato solo come area di scrittura (headless).
 // Si legge l'API REST pubblica: solo contenuti pubblicati, nessuna chiave. Le bozze di Luana restano in WordPress.
 //   WORDPRESS_API  indirizzo base dell'API, per esempio
 //                  https://contenuti.esempio.it/wp-json/wp/v2           (WordPress su hosting)
 //                  https://public-api.wordpress.com/wp/v2/sites/xxx.wordpress.com   (sito WordPress.com)
-// Le tre sezioni del pannello (le ultime due le crea wordpress/mu-plugins/domus-sezioni.php):
+// Le sezioni del pannello (tutte tranne Articoli le crea wordpress/mu-plugins/domus-sezioni.php):
 //   Articoli           = post pubblicati; la prima categoria diventa l'etichetta (Vendere, Comprare); immagine in evidenza = foto.
 //   Domande frequenti  = titolo domanda, testo risposta, Gruppo = blocco della pagina; ordine col campo Ordine.
 //   Immobili venduti   = foto in evidenza più i campi Zona, Riga dei tempi, Riga del risultato, Sede; ordine col campo Ordine.
+//   Testimonianze      = titolo nome, testo recensione, campi Vendere o comprare, Comune, Stelle; foto facoltativa; ordine col campo Ordine.
 
 const testo = html => String(html ?? '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;|&#160;/g, ' ')
   .replace(/&#8217;|&rsquo;/g, '’').replace(/&#8216;/g, '‘').replace(/&#8220;|&#8221;/g, '"').replace(/&#8211;/g, '-')
@@ -74,9 +75,20 @@ async function venduti(base) {
   }).filter(v => v.zona || v.esito);
 }
 
+async function testimonianze(base) {
+  const lista = await tutti(`${base}/testimonianze?status=publish&_embed=1&orderby=menu_order&order=asc`);
+  if (!lista) return null;
+  return lista.map(t => {
+    const m = t.meta ?? {};
+    const stelle = Math.min(5, Math.max(1, parseInt(m.domus_stelle, 10) || 5));
+    return { nome: testo(t.title?.rendered), testo: testo(t.content?.rendered), dove: testo(m.domus_dove), stelle,
+      tipo: ['vendere', 'comprare'].includes(m.domus_tipo) ? m.domus_tipo : '', foto: t._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? '' };
+  }).filter(t => t.nome && t.testo && t.tipo);
+}
+
 export function indirizzo() { return (process.env.WORDPRESS_API ?? '').trim().replace(/\/+$/, '') || null; }
 
 export async function contenuti(base) {
-  const [a, d, v] = await Promise.all([articoli(base), domande(base), venduti(base)]);
-  return { articoli: a, faq: d, venduti: v };
+  const [a, d, v, t] = await Promise.all([articoli(base), domande(base), venduti(base), testimonianze(base)]);
+  return { articoli: a, faq: d, venduti: v, testimonianze: t };
 }
