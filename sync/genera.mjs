@@ -5,7 +5,8 @@
 //   node sync/genera.mjs --contenuti-prova  articoli, domande, venduti e testimonianze da sync/contenuti-prova.json invece che da WordPress
 // Articoli, domande frequenti, immobili venduti e testimonianze arrivano da WordPress solo se c'è WORDPRESS_API (vedi sync/wordpress.mjs); senza, quelle pagine restano come in docs/.
 // Regole: _site/ non va mai nel repo (è in .gitignore). Il log contiene solo conteggi, mai valori dei record.
-import { readFileSync, writeFileSync, rmSync, cpSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, rmSync, cpSync, existsSync, readdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as oo from './onoffice.mjs';
@@ -330,7 +331,17 @@ async function main() {
     scrivi(f, sostituisci(leggi(f), griglia, `<div class="grid c3">${imports(ns)}</div>`, `griglia di ${f}`));
   }
   await contenutiWordPress(args.includes('--contenuti-prova'));
+  versioneScript('testi-luana.js');
   console.log(`Pagine immobile: ${elenco.length}. Per sede: ${Object.entries(conteggioSedi).map(([k, v]) => `${k} ${v}`).join(', ')}. Senza agente in agenti.json: ${elenco.filter(e => !agenti[e.agente]).length}`);
+}
+
+// Hostinger tiene in cache i .js: al nome si aggiunge ?v=<impronta del file>, così a ogni modifica il browser prende quello nuovo.
+function versioneScript(f) {
+  const v = createHash('sha1').update(readFileSync(join(USCITA, f))).digest('hex').slice(0, 10);
+  for (const p of readdirSync(USCITA).filter(n => n.endsWith('.html'))) {
+    const s = leggi(p);
+    if (s.includes(`./${f}"`)) scrivi(p, s.split(`./${f}"`).join(`./${f}?v=${v}"`));
+  }
 }
 
 main().catch(err => { console.error(String(err.message ?? err)); process.exit(1); });

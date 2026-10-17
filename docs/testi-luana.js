@@ -47,8 +47,10 @@
   // Nome della pagina dall'indirizzo, anche senza ".html" e nella radice del sito.
   // Le schede e gli articoli generati dalla build usano il Doc del loro modello.
   function nomePagina() {
-    var nome = decodeURIComponent(location.pathname.split('/').pop() || '');
-    nome = nome.replace(/\.html$/, '').replace(/\.dc$/, '');
+    // Hostinger toglie ".html" (/2-02-vendere-casa.dc) e a volte aggiunge "/" in fondo.
+    var parti = location.pathname.split('/').filter(Boolean);
+    var nome = decodeURIComponent(parti.pop() || '');
+    nome = nome.replace(/\.html?$/, '').replace(/\.dc$/, '');
     if (nome === '' || nome === 'index') return '2-01-home';
     if (/^immobile-/.test(nome) || nome === 'SchedaImmobile') return '2-05-scheda-immobile';
     if (/^articolo-/.test(nome)) return '2-13-articolo';
