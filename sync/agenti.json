@@ -1,7 +1,7 @@
 {
-  "_nota": "Profilo pubblico degli agenti, compilato a mano (dubbio B della mappa campi: da onOffice si legge solo l'id dell'agente). Chiave = id utente onOffice. Le voci 'finto-' servono ai dati di prova. Dati di lavoro, mai numeri o mail personali.",
-  "_predefinito": { "nome": "Domus Real Estate", "ruolo": "Agenzia", "foto": "", "whatsapp": "393517062449", "email": "info@domusrealestate.it", "pagina": "2-11-contatti.dc.html" },
-  "finto-1": { "nome": "Marco Ferrari", "ruolo": "Responsabile della sede di Treviglio", "foto": "https://img.magnific.com/free-photo/portrait-modern-man_23-2147961425.jpg", "whatsapp": "393517062449", "email": "info@domusrealestate.it", "pagina": "2-09-agente.dc.html" },
-  "finto-2": { "nome": "Agente di prova Martinengo", "ruolo": "Agente della sede di Martinengo", "foto": "", "whatsapp": "393517062449", "email": "info@domusrealestate.it", "pagina": "2-09-agente.dc.html" },
-  "finto-3": { "nome": "Agente di prova Collecchio", "ruolo": "Agente della sede di Collecchio", "foto": "", "whatsapp": "393517062449", "email": "info@domusrealestate.it", "pagina": "2-09-agente.dc.html" }
+  "_nota": "Profilo pubblico degli agenti, compilato a mano (dubbio B della mappa campi: da onOffice si legge solo l'id dell'agente). Chiave = id utente onOffice. Le voci 'finto-' servono ai dati di prova. Dati di lavoro, mai numeri o mail personali. Ogni voce ha la sua pagina agente-<chiave>.dc.html (la voce _predefinito: agente-domus.dc.html).",
+  "_predefinito": { "nome": "Domus Real Estate", "ruolo": "Agenzia", "foto": "", "whatsapp": "393517062449", "email": "info@domusrealestate.it" },
+  "finto-1": { "nome": "Marco Ferrari", "ruolo": "Responsabile della sede di Treviglio", "foto": "https://img.magnific.com/free-photo/portrait-modern-man_23-2147961425.jpg", "whatsapp": "393517062449", "email": "info@domusrealestate.it" },
+  "finto-2": { "nome": "Agente di prova Martinengo", "ruolo": "Agente della sede di Martinengo", "foto": "", "whatsapp": "393517062449", "email": "info@domusrealestate.it" },
+  "finto-3": { "nome": "Agente di prova Collecchio", "ruolo": "Agente della sede di Collecchio", "foto": "", "whatsapp": "393517062449", "email": "info@domusrealestate.it" }
 }

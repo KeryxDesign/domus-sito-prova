@@ -15,12 +15,14 @@
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
   componentDidMount() {
-    const f = decodeURIComponent(location.pathname.split('/').pop() || '');
-    const madre = { '2-05-scheda-immobile.dc.html': '2-04-immobili-in-vendita.dc.html', '2-08-sede-treviglio.dc.html': '2-07-sedi.dc.html', '2-08-sede-martinengo.dc.html': '2-07-sedi.dc.html', '2-08-sede-collecchio.dc.html': '2-07-sedi.dc.html', '2-09-agente.dc.html': '2-06-chi-siamo.dc.html', '2-13-articolo.dc.html': '2-12-approfondimenti.dc.html', '2-14-metodo.dc.html': '2-12-approfondimenti.dc.html', '2-15-domande-e-risposte.dc.html': '2-12-approfondimenti.dc.html' };
-    const voce = madre[f] || f;
+    // come nel MenuInTesta: nomi senza ".html", perché Hostinger lo toglie dall'indirizzo
+    const nome = h => decodeURIComponent(String(h || '')).replace(/[?#].*$/, '').replace(/\/+$/, '').split('/').pop().replace(/\.html?$/, '').replace(/\.dc$/, '');
+    const f = nome(location.pathname) || '2-01-home';
+    const madre = { '2-05-scheda-immobile': '2-04-immobili-in-vendita', '2-08-sede-treviglio': '2-07-sedi', '2-08-sede-martinengo': '2-07-sedi', '2-08-sede-collecchio': '2-07-sedi', '2-09-agente': '2-06-chi-siamo', '2-13-articolo': '2-12-approfondimenti', '2-14-metodo': '2-12-approfondimenti', '2-15-domande-e-risposte': '2-12-approfondimenti' };
+    const voce = madre[f] || (/^immobile-/.test(f) ? '2-04-immobili-in-vendita' : /^agente-/.test(f) ? '2-06-chi-siamo' : /^articolo-/.test(f) ? '2-12-approfondimenti' : f);
     const pd = document.querySelector('footer.pd'); if (!pd) return;
-    pd.querySelectorAll('a[href]').forEach(a => { const h = a.getAttribute('href'); if (h === voce || h === f) a.setAttribute('aria-current', 'page'); });
-    pd.querySelectorAll('.dd-pd').forEach(d => { if (d.querySelector('[aria-current]') || voce === '2-07-sedi.dc.html') d.classList.add('attiva'); });
+    pd.querySelectorAll('a[href]').forEach(a => { const h = nome(a.getAttribute('href')); if (h === voce || h === f) a.setAttribute('aria-current', 'page'); });
+    pd.querySelectorAll('.dd-pd').forEach(d => { if (d.querySelector('[aria-current]') || voce === '2-07-sedi') d.classList.add('attiva'); });
   }
   renderVals() { return {}; }
 }
