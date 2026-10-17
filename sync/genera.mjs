@@ -2,8 +2,8 @@
 //   node sync/genera.mjs             con ONOFFICE_TOKEN e ONOFFICE_SECRET legge onOffice, senza usa sync/dati-finti.json
 //   node sync/genera.mjs --finti     usa sempre i dati finti
 //   node sync/genera.mjs --verifica  stampa solo struttura e conteggi dell'account onOffice, non genera nulla
-//   node sync/genera.mjs --contenuti-prova  articoli e domande da sync/contenuti-prova.json invece che da WordPress
-// Articoli e domande frequenti arrivano da WordPress solo se c'è WORDPRESS_API (vedi sync/wordpress.mjs); senza, quelle pagine restano come in docs/.
+//   node sync/genera.mjs --contenuti-prova  articoli, domande e venduti da sync/contenuti-prova.json invece che da WordPress
+// Articoli, domande frequenti e immobili venduti arrivano da WordPress solo se c'è WORDPRESS_API (vedi sync/wordpress.mjs); senza, quelle pagine restano come in docs/.
 // Regole: _site/ non va mai nel repo (è in .gitignore). Il log contiene solo conteggi, mai valori dei record.
 import { readFileSync, writeFileSync, rmSync, cpSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -195,13 +195,33 @@ function articolo(modello, a) {
 }
 
 function domandeFrequenti(s, faq) {
-  const lead = faq.intro ? `<p class="lead">${esc(faq.intro)}</p>` : '';
+  // titolo e testo d'apertura restano quelli della 2-15; da WordPress arrivano i gruppi e le domande
   const salti = faq.gruppi.map(g => `<a href="#${esc(g.id)}">${esc(g.titolo)}</a>`).join('');
-  s = sostituisci(s, /<h1>[^<]*<\/h1>\s*<p class="lead">[^<]*<\/p>\s*<div class="etichette">[\s\S]*?<\/div>/,
-    () => `<h1>${esc(faq.titolo)}</h1>\n  ${lead}\n  <div class="etichette">${salti}</div>`, 'testata della 2-15');
+  s = sostituisci(s, /(<h1>[^<]*<\/h1>\s*<p class="lead">[^<]*<\/p>\s*<div class="etichette">)[\s\S]*?(<\/div>)/,
+    (_, a, b) => `${a}${salti}${b}`, 'testata della 2-15');
   const gruppi = faq.gruppi.map(g => `<div class="gruppo" id="${esc(g.id)}">\n    <h2>${esc(g.titolo)}</h2>\n    <div>\n${g.voci.map(v =>
     `      <details class="acc"><summary>${esc(v.domanda)}</summary><div>${v.risposta}</div></details>`).join('\n')}\n    </div>\n  </div>`).join('\n');
   return sostituisci(s, /(<section class="sz g" data-blocco="2\.15 · 3 4"><div class="wrap">)[\s\S]*?(<\/div><\/section>)/, (_, a, b) => `${a}\n${gruppi}\n${b}`, 'gruppi della 2-15');
+}
+
+function cardVenduto(v, ph) {
+  const foto = v.foto ? `<img src="${esc(v.foto)}" alt="${esc(v.fotoAlt || 'Casa venduta')}" loading="lazy">` : '<span>Foto</span>';
+  const righe = [['small', v.zona], ['tempo', v.tempo], ['', v.esito]].filter(([, t]) => t)
+    .map(([c, t]) => `<p${c ? ` class="${c}"` : ''}>${esc(t)}</p>`).join('');
+  return `<div class="card caso foto"><div class="${ph}">${foto}</div><div class="corpo">${righe}</div></div>`;
+}
+
+// Le card "case vendute": in home le prime tre, nella pagina di ogni sede le sue (fino a sei).
+// Dove non c'è ancora nessun venduto restano le card d'esempio di docs/.
+function venduti(lista) {
+  const griglia = (f, blocco, scelti, ph) => {
+    if (!scelti.length || !existsSync(join(USCITA, f))) return;
+    const cerca = new RegExp(`(data-blocco="${blocco.replace(/[.]/g, '\\.')}"[\\s\\S]*?<div class="grid c3">)(?:<div class="card caso foto">[\\s\\S]*?</p></div></div>)+`);
+    scrivi(f, sostituisci(leggi(f), cerca, (_, a) => `${a}${scelti.map(v => cardVenduto(v, ph)).join('')}`, `case vendute della ${f}`));
+  };
+  griglia('2-01-home.dc.html', '2.1 · 5', lista.slice(0, 3), 'ph r43');
+  for (const sede of ['treviglio', 'martinengo', 'collecchio'])
+    griglia(`2-08-sede-${sede}.dc.html`, '2.8 · 2 3', lista.filter(v => v.sede === sede).slice(0, 6), 'ph r43 ag-da-tablet');
 }
 
 async function contenutiWordPress(prova) {
@@ -222,7 +242,9 @@ async function contenutiWordPress(prova) {
       (_, a, b) => `${a}\n    ${arts.map(cardArticolo).join('\n    ')}\n  ${b}`, 'griglia articoli della 2-12'));
   }
   if (c.faq?.gruppi?.length) scrivi('2-15-domande-e-risposte.dc.html', domandeFrequenti(leggi('2-15-domande-e-risposte.dc.html'), c.faq));
-  console.log(`Fonte articoli e domande: ${prova ? 'contenuti di prova' : 'WordPress'}. Articoli: ${arts.length}. Domande: ${(c.faq?.gruppi ?? []).reduce((n, g) => n + g.voci.length, 0)}`);
+  if (c.venduti?.length) venduti(c.venduti);
+  const nonAttive = [c.faq ? '' : 'domande', c.venduti ? '' : 'venduti'].filter(Boolean);
+  console.log(`Fonte contenuti: ${prova ? 'contenuti di prova' : 'WordPress'}. Articoli: ${arts.length}. Domande: ${(c.faq?.gruppi ?? []).reduce((n, g) => n + g.voci.length, 0)}. Venduti: ${c.venduti?.length ?? 0}${nonAttive.length ? `. Sezioni non ancora attive in WordPress: ${nonAttive.join(', ')}` : ''}`);
 }
 
 async function main() {

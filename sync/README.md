@@ -17,12 +17,17 @@ Interruttore: la build usa i dati veri solo se la variabile del repo `ONOFFICE_A
 
 Chiavi: solo nei Secrets del repo `ONOFFICE_TOKEN` e `ONOFFICE_SECRET`. Non vanno mai scritte in file o log. Tutte le pagine hanno `noindex,nofollow`.
 
-## Articoli e domande frequenti da WordPress
+## Articoli, domande frequenti e immobili venduti da WordPress
 
-WordPress serve solo come area dove Luana scrive: nessuno visita il sito WordPress, il sito resta questo su Pages. `wordpress.mjs` legge l'API REST pubblica durante la build (solo contenuti pubblicati, nessuna chiave) e `genera.mjs` crea una pagina `articolo-<slug>.dc.html` per articolo dal modello 2-13, riempie la griglia della 2-12 e i gruppi della 2-15.
+WordPress serve solo come area dove Luana scrive: nessuno visita il sito WordPress, il sito resta questo su Pages. `wordpress.mjs` legge l'API REST pubblica durante la build (solo contenuti pubblicati, nessuna chiave) e `genera.mjs` crea una pagina `articolo-<slug>.dc.html` per articolo dal modello 2-13, riempie la griglia della 2-12, i gruppi della 2-15 e le card delle case vendute (in home le prime tre, nella pagina di ogni sede le sue, fino a sei).
 
-- Si accende con la variabile del repo `WORDPRESS_API` (Settings, Secrets and variables, Actions, Variables). Esempi: `https://contenuti.<dominio>/wp-json/wp/v2` oppure `https://public-api.wordpress.com/wp/v2/sites/<nome>.wordpress.com`. Senza la variabile le pagine 2-12, 2-13 e 2-15 restano come in `docs/`.
-- In WordPress: gli articoli sono gli Articoli pubblicati (la prima categoria fa da etichetta, l'immagine in evidenza è la foto, il riassunto è il sommario). Le domande stanno nella Pagina con slug `domande-e-risposte`: ogni Titolo H2 è un gruppo, ogni blocco Dettagli è una domanda con la risposta dentro.
+- Si accende con la variabile del repo `WORDPRESS_API` (Settings, Secrets and variables, Actions, Variables). Esempi: `https://contenuti.<dominio>/wp-json/wp/v2` oppure `https://public-api.wordpress.com/wp/v2/sites/<nome>.wordpress.com`. Senza la variabile queste pagine restano come in `docs/`.
+- Nel pannello ci sono tre sezioni. Le ultime due le crea il plugin `wordpress/mu-plugins/domus-sezioni.php`, che la copia su Hostinger carica in `cms/wp-content/mu-plugins/` (si modifica nel repo, non sul server).
+  - Articoli: gli articoli pubblicati. La prima categoria fa da etichetta, l'immagine in evidenza è la foto, il riassunto è il sommario.
+  - Domande frequenti: titolo = domanda, testo = risposta, Gruppo = blocco della pagina (i gruppi compaiono nell'ordine in cui sono stati creati, le domande col campo Ordine). Senza gruppo vanno in "Altre domande".
+  - Immobili venduti: foto in evidenza più i campi Zona, Riga dei tempi, Riga del risultato e Sede, ordine col campo Ordine. Il titolo serve solo a riconoscerli nel pannello. Si inseriscono a mano: niente dati copiati dal gestionale.
+- `wordpress/mu-plugins/domus-segnaposto.php` mette una sola volta dei contenuti segnaposto nelle tre sezioni (numeri a zero, nessun dato vero). Cancellati, non tornano.
+- Se una sezione non è ancora attiva (plugin non ancora caricato), la build lo scrive nel log e lascia quella parte come in `docs/`.
 - `node sync/genera.mjs --finti --contenuti-prova` mostra le pagine con `contenuti-prova.json`, senza WordPress.
 
 Aggiornamento quando Luana pubblica: il sito si ricostruisce già due volte al giorno e con Run workflow. Per farlo subito, WordPress manda a GitHub l'evento `contenuti-aggiornati` (`POST https://api.github.com/repos/KeryxDesign/domus-sito-prova/dispatches` con `{"event_type":"contenuti-aggiornati"}`), con un token GitHub a grana fine limitato a questo repo (permesso Contents: read and write). Il token sta solo nella configurazione di WordPress, mai nel repo. Basta un plugin di webhook oppure un piccolo snippet su `transition_post_status`.

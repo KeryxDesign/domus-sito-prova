@@ -1,16 +1,16 @@
-// Legge articoli e domande frequenti da un WordPress usato solo come area di scrittura (headless).
+// Legge articoli, domande frequenti e immobili venduti da un WordPress usato solo come area di scrittura (headless).
 // Si legge l'API REST pubblica: solo contenuti pubblicati, nessuna chiave. Le bozze di Luana restano in WordPress.
 //   WORDPRESS_API  indirizzo base dell'API, per esempio
 //                  https://contenuti.esempio.it/wp-json/wp/v2           (WordPress su hosting)
 //                  https://public-api.wordpress.com/wp/v2/sites/xxx.wordpress.com   (sito WordPress.com)
-// Convenzioni in WordPress:
-//   articoli  = Articoli pubblicati; la prima categoria diventa l'etichetta (Vendere, Comprare); immagine in evidenza = foto.
-//   domande   = la Pagina con slug "domande-e-risposte": ogni Titolo H2 è un gruppo, ogni blocco Dettagli è una domanda.
+// Le tre sezioni del pannello (le ultime due le crea wordpress/mu-plugins/domus-sezioni.php):
+//   Articoli           = post pubblicati; la prima categoria diventa l'etichetta (Vendere, Comprare); immagine in evidenza = foto.
+//   Domande frequenti  = titolo domanda, testo risposta, Gruppo = blocco della pagina; ordine col campo Ordine.
+//   Immobili venduti   = foto in evidenza più i campi Zona, Riga dei tempi, Riga del risultato, Sede; ordine col campo Ordine.
 
 const testo = html => String(html ?? '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;|&#160;/g, ' ')
   .replace(/&#8217;|&rsquo;/g, '’').replace(/&#8216;/g, '‘').replace(/&#8220;|&#8221;/g, '"').replace(/&#8211;/g, '-')
   .replace(/&hellip;|&#8230;|\[&hellip;\]/g, '…').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
-const slug = s => testo(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 // Il contenuto lo scrive chi ha accesso a WordPress: togliamo comunque script, iframe e attributi on*
 const pulito = html => String(html ?? '')
   .replace(/<(script|style|iframe|object|embed)[\s\S]*?<\/\1>/gi, '').replace(/<(script|iframe|object|embed)[^>]*\/?>/gi, '')
@@ -19,17 +19,25 @@ const minuti = html => Math.max(1, Math.round(testo(html).split(' ').length / 20
 
 async function prendi(url) {
   const r = await fetch(url, { headers: { accept: 'application/json' } });
+  // 404 = sezione non ancora attiva (il plugin non è ancora sul server): si va avanti senza
+  if (r.status === 404) return { dati: null, pagine: 0 };
   if (!r.ok) throw new Error(`WordPress ha risposto ${r.status} su ${new URL(url).pathname}`);
   return { dati: await r.json(), pagine: Number(r.headers.get('x-wp-totalpages') ?? 1) };
 }
 
-async function articoli(base) {
-  const tutti = [];
+async function tutti(url) {
+  const lista = [];
   for (let p = 1, totale = 1; p <= totale; p++) {
-    const { dati, pagine } = await prendi(`${base}/posts?status=publish&per_page=50&page=${p}&_embed=1&orderby=date&order=desc`);
-    tutti.push(...dati); totale = pagine;
+    const { dati, pagine } = await prendi(`${url}&per_page=100&page=${p}`);
+    if (!dati) return null;
+    lista.push(...dati); totale = pagine;
   }
-  return tutti.map(a => {
+  return lista;
+}
+
+async function articoli(base) {
+  const lista = await tutti(`${base}/posts?status=publish&_embed=1&orderby=date&order=desc`) ?? [];
+  return lista.map(a => {
     const foto = a._embedded?.['wp:featuredmedia']?.[0];
     const categorie = (a._embedded?.['wp:term'] ?? []).flat().filter(t => t.taxonomy === 'category' && t.slug !== 'uncategorized' && t.slug !== 'senza-categoria');
     return {
@@ -41,24 +49,34 @@ async function articoli(base) {
 }
 
 async function domande(base) {
-  const { dati } = await prendi(`${base}/pages?slug=domande-e-risposte&status=publish`);
-  const pagina = dati[0];
-  if (!pagina) return null;
-  const html = pulito(pagina.content?.rendered);
-  const pezzi = html.split(/<h2[^>]*>/i);
-  const intro = testo((pezzi[0].match(/<p[^>]*>([\s\S]*?)<\/p>/i) ?? [])[1]);
-  const gruppi = pezzi.slice(1).map(p => {
-    const [titolo, resto = ''] = p.split(/<\/h2>/i);
-    const voci = [...resto.matchAll(/<details[^>]*>\s*<summary[^>]*>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/gi)]
-      .map(m => ({ domanda: testo(m[1]), risposta: m[2].trim() }));
-    return { id: slug(titolo), titolo: testo(titolo), voci };
-  }).filter(g => g.voci.length);
-  return { titolo: testo(pagina.title?.rendered), intro, gruppi };
+  const [voci, gruppi] = await Promise.all([
+    tutti(`${base}/domande?status=publish&orderby=menu_order&order=asc`),
+    tutti(`${base}/gruppi-domande?orderby=id&order=asc&hide_empty=true`)]);
+  if (!voci || !gruppi) return null;
+  // i gruppi compaiono nell'ordine in cui sono stati creati; le domande senza gruppo vanno in "Altre domande"
+  const blocchi = [...gruppi.map(g => ({ id: g.slug, titolo: testo(g.name), termine: g.id, voci: [] })),
+    { id: 'altre-domande', titolo: 'Altre domande', termine: null, voci: [] }];
+  for (const v of voci) {
+    const b = blocchi.find(g => (v['gruppi-domande'] ?? []).includes(g.termine)) ?? blocchi.at(-1);
+    b.voci.push({ domanda: testo(v.title?.rendered), risposta: pulito(v.content?.rendered) });
+  }
+  return { gruppi: blocchi.filter(g => g.voci.length).map(({ termine, ...g }) => g) };
+}
+
+async function venduti(base) {
+  const lista = await tutti(`${base}/venduti?status=publish&_embed=1&orderby=menu_order&order=asc`);
+  if (!lista) return null;
+  return lista.map(v => {
+    const foto = v._embedded?.['wp:featuredmedia']?.[0];
+    const m = v.meta ?? {};
+    return { zona: testo(m.domus_zona), tempo: testo(m.domus_tempo), esito: testo(m.domus_esito),
+      sede: String(m.domus_sede ?? ''), foto: foto?.source_url ?? '', fotoAlt: foto?.alt_text ?? '' };
+  }).filter(v => v.zona || v.esito);
 }
 
 export function indirizzo() { return (process.env.WORDPRESS_API ?? '').trim().replace(/\/+$/, '') || null; }
 
 export async function contenuti(base) {
-  const [a, d] = await Promise.all([articoli(base), domande(base)]);
-  return { articoli: a, faq: d };
+  const [a, d, v] = await Promise.all([articoli(base), domande(base), venduti(base)]);
+  return { articoli: a, faq: d, venduti: v };
 }
