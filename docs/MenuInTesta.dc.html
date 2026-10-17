@@ -30,13 +30,15 @@ class Component extends DCLogic {
     this.segnaAttiva();
   }
   segnaAttiva() {
-    const f = decodeURIComponent((location.pathname.split('/').pop() || '')).replace(/\?.*$/, '');
-    const madre = { '2-05-scheda-immobile.dc.html': '2-04-immobili-in-vendita.dc.html', '2-08-sede-treviglio.dc.html': '2-07-sedi.dc.html', '2-08-sede-martinengo.dc.html': '2-07-sedi.dc.html', '2-08-sede-collecchio.dc.html': '2-07-sedi.dc.html', '2-09-agente.dc.html': '2-06-chi-siamo.dc.html', '2-13-articolo.dc.html': '2-12-approfondimenti.dc.html' };
-    const voce = madre[f] || f;
+    // Hostinger toglie ".html" (/2-02-vendere-casa.dc) e a volte aggiunge "/": si confrontano i nomi senza estensione
+    const nome = h => decodeURIComponent(String(h || '')).replace(/[?#].*$/, '').replace(/\/+$/, '').split('/').pop().replace(/\.html?$/, '').replace(/\.dc$/, '');
+    const f = nome(location.pathname) || '2-01-home';
+    const madre = { '2-05-scheda-immobile': '2-04-immobili-in-vendita', '2-08-sede-treviglio': '2-07-sedi', '2-08-sede-martinengo': '2-07-sedi', '2-08-sede-collecchio': '2-07-sedi', '2-09-agente': '2-06-chi-siamo', '2-13-articolo': '2-12-approfondimenti' };
+    const voce = madre[f] || (/^immobile-/.test(f) ? '2-04-immobili-in-vendita' : /^agente-/.test(f) ? '2-06-chi-siamo' : /^articolo-/.test(f) ? '2-12-approfondimenti' : f);
     const hd = document.querySelector('header.hd'); if (!hd) return;
     hd.querySelectorAll('[aria-current]').forEach(a => a.removeAttribute('aria-current'));
-    hd.querySelectorAll('a[href]').forEach(a => { const h = a.getAttribute('href'); if (h === voce || h === f) a.setAttribute('aria-current', 'page'); });
-    hd.querySelectorAll('.dd, .dd-m').forEach(d => { if (d.querySelector('[aria-current]') || (voce === '2-07-sedi.dc.html' && d.querySelector('a[href="2-07-sedi.dc.html"], a[href="2-08-sede-treviglio.dc.html"]'))) d.classList.add('attiva'); });
+    hd.querySelectorAll('a[href]').forEach(a => { const h = nome(a.getAttribute('href')); if (h === voce || h === f) a.setAttribute('aria-current', 'page'); });
+    hd.querySelectorAll('.dd, .dd-m').forEach(d => { if (d.querySelector('[aria-current]') || (voce === '2-07-sedi' && d.querySelector('a[href="2-07-sedi.dc.html"], a[href="2-08-sede-treviglio.dc.html"]'))) d.classList.add('attiva'); });
   }
   componentWillUnmount() { window.removeEventListener('scroll', this.onScroll); window.removeEventListener('keydown', this.onKey); }
   applica() {

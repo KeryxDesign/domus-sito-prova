@@ -54,6 +54,7 @@
     if (nome === '' || nome === 'index') return '2-01-home';
     if (/^immobile-/.test(nome) || nome === 'SchedaImmobile') return '2-05-scheda-immobile';
     if (/^articolo-/.test(nome)) return '2-13-articolo';
+    if (/^agente-/.test(nome)) return '2-09-agente';
     return nome;
   }
 

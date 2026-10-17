@@ -105,6 +105,10 @@ async function daOnOffice(cred) {
 
 // ---------- generazione ----------
 function profilo(agenti, id) { return agenti[id] ?? agenti._predefinito; }
+// Ogni profilo di agenti.json ha la sua pagina dal modello 2-09; chi non è in agenti.json va sulla pagina di Domus.
+const chiaveAgente = (agenti, id) => agenti[id] ? String(id) : '_predefinito';
+const paginaAgente = k => k === '_predefinito' ? 'agente-domus.dc.html' : `agente-${k.replace(/[^a-zA-Z0-9-]/g, '')}.dc.html`;
+const numeroLeggibile = n => String(n).replace(/^39/, '').replace(/^(\d{3})(\d{3})(\d+)$/, '$1 $2 $3');
 
 function datiCard(e, agenti, sedi) {
   const a = profilo(agenti, e.agente);
@@ -142,6 +146,8 @@ function paginaImmobile(modello, e, n, tutti, agenti) {
   const paragrafi = String(e.descrizione ?? '').split(/\n\s*\n|\r\n\s*\r\n/).map(p => p.trim()).filter(Boolean);
   const wa = a.whatsapp ? `https://wa.me/${esc(a.whatsapp)}` : '2-11-contatti.dc.html';
   const tel = a.whatsapp ? `<a class="btn alt" href="tel:+${esc(a.whatsapp)}">Chiama</a>` : '';
+  // il pulsante dell'agente apre la sua pagina con il modulo già pronto per questa casa (modulo-agente.js)
+  const scrivi = `${paginaAgente(chiaveAgente(agenti, e.agente))}?${new URLSearchParams({ casa: titolo, ...(e.codice ? { rif: e.codice } : {}) })}#scrivi`;
   const mail = `mailto:${esc(a.email || 'info@domusrealestate.it')}?subject=${encodeURIComponent(e.titolo + (e.codice ? ` (rif. ${e.codice})` : ''))}`;
   // case simili: stessa sede o tipologia, poi le più vicine di prezzo
   const simili = tutti.map((x, i) => ({ x, n: i + 1 })).filter(o => o.n !== n)
@@ -168,13 +174,27 @@ function paginaImmobile(modello, e, n, tutti, agenti) {
   const desc = `<div class="desc">${[primo ?? '', ...resto].map(p => `<p>${esc(p)}</p>`).join('')}</div>`;
   s = sostituisci(s, /<div class="desc">[\s\S]*?<\/details><\/div>/, desc, 'descrizione');
   // l'agente sta sotto la card grigia del prezzo, con le iniziali e senza foto
-  const agente = `<div class="card im-agente-lato"><div class="im-chi"><span class="im-cerchio" aria-hidden="true">${esc(iniziali(a.nome))}</span><div><p class="h3">${esc(a.nome)}</p><p class="small">${esc(a.ruolo)}</p></div></div><p>Ti richiama per fissare giorno e ora della visita. In visita puoi chiedere tutto, anche quello che nell’annuncio non c’è.</p><div class="azioni">${tel}<a class="btn alt" href="${esc(a.pagina)}">Apri la sua pagina</a></div></div>`;
+  const agente = `<div class="card im-agente-lato"><div class="im-chi"><span class="im-cerchio" aria-hidden="true">${esc(iniziali(a.nome))}</span><div><p class="h3">${esc(a.nome)}</p><p class="small">${esc(a.ruolo)}</p></div></div><p>Ti richiama per fissare giorno e ora della visita. In visita puoi chiedere tutto, anche quello che nell’annuncio non c’è.</p><div class="azioni">${tel}<a class="btn alt" href="${esc(scrivi)}">Apri la sua pagina</a></div></div>`;
   s = sostituisci(s, /<div class="pan pannello lato">([\s\S]*?)<\/div>(\n<div class="desc">)/,
     (_, dentro, dopo) => `<div class="pan lato im-colonna"><div class="pannello">${dentro}</div>${agente}</div>${dopo}`, 'colonna del prezzo');
   s = sostituisci(s, /<section class="sz g" data-blocco="2\.5 · agente">[\s\S]*?<\/section>\n?/, '', 'sezione agente');
   s = simili.length ? sostituisci(s, griglia, `<div class="grid c3">${imports(simili)}</div>`, 'case simili')
     : sostituisci(s, /<section class="sz b" data-blocco="2\.5 · 10">[\s\S]*?<\/section>/, '', 'case simili');
   return s;
+}
+
+function paginaDiAgente(modello, k, a, ns) {
+  let s = modello;
+  s = sostituisci(s, /<title>[^<]*<\/title>/, `<title>${esc(a.nome)} · Domus Real Estate</title>`, 'title della 2-09');
+  s = sostituisci(s, /<div class="im-iniziali" aria-hidden="true">[^<]*<\/div><div class="st"><h1>[^<]*<\/h1><p class="lead">[^<]*<\/p>/,
+    `<div class="im-iniziali" aria-hidden="true">${esc(iniziali(a.nome))}</div><div class="st"><h1>${esc(a.nome)}</h1><p class="lead">${esc(a.ruolo)}</p>`, 'testata della 2-09');
+  s = ns.length ? sostituisci(s, griglia, `<div class="grid c3">${imports(ns)}</div>`, 'case della 2-09')
+    : sostituisci(s, /<section class="sz g" data-blocco="2\.9 · 6">[\s\S]*?<\/section>\n?/, '', 'case della 2-09');
+  const email = a.email || 'info@domusrealestate.it';
+  const contatti = (a.whatsapp ? `<a class="btn" href="tel:+${esc(a.whatsapp)}">Chiama ${esc(numeroLeggibile(a.whatsapp))}</a><a class="btn alt" href="https://wa.me/${esc(a.whatsapp)}">Scrivi su WhatsApp</a>` : '')
+    + `<a class="btn alt" href="mailto:${esc(email)}">Scrivi una mail</a>`;
+  s = sostituisci(s, /(<div class="azioni im-contatti">)[\s\S]*?(<\/div><\/div><\/section>)/, (_, x, y) => x + contatti + y, 'contatti della 2-09');
+  return sostituisci(s, /<input type="hidden" name="agente" value="[^"]*">/, `<input type="hidden" name="agente" value="${esc(a.nome)}">`, 'agente del modulo della 2-09');
 }
 
 // ---------- articoli e domande (WordPress) ----------
@@ -308,6 +328,12 @@ async function main() {
   // la 2-05 diventa la scheda del primo immobile, così i link del menu non mostrano una casa finta
   if (elenco.length) scrivi('2-05-scheda-immobile.dc.html', paginaImmobile(modello, elenco[0], 1, elenco, agenti));
 
+  const modelloAgente = leggi('2-09-agente.dc.html');
+  for (const k of Object.keys(agenti).filter(k => !k.startsWith('_') || k === '_predefinito')) {
+    const ns = elenco.map((e, i) => chiaveAgente(agenti, e.agente) === k ? i + 1 : 0).filter(Boolean);
+    scrivi(paginaAgente(k), paginaDiAgente(modelloAgente, k, agenti[k], ns));
+  }
+
   const tuttiN = elenco.map((_, i) => i + 1);
   let lista = leggi('2-04-immobili-in-vendita.dc.html');
   lista = sostituisci(lista, griglia, `<div class="grid c3">${imports(tuttiN)}</div>`, 'griglia della lista');
@@ -331,7 +357,7 @@ async function main() {
     scrivi(f, sostituisci(leggi(f), griglia, `<div class="grid c3">${imports(ns)}</div>`, `griglia di ${f}`));
   }
   await contenutiWordPress(args.includes('--contenuti-prova'));
-  versioneScript('testi-luana.js');
+  for (const js of ['testi-luana.js', 'galleria-immobile.js', 'modulo-agente.js']) versioneScript(js);
   console.log(`Pagine immobile: ${elenco.length}. Per sede: ${Object.entries(conteggioSedi).map(([k, v]) => `${k} ${v}`).join(', ')}. Senza agente in agenti.json: ${elenco.filter(e => !agenti[e.agente]).length}`);
 }
 

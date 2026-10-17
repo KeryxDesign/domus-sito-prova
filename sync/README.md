@@ -5,7 +5,7 @@ Il sito pubblicato si costruisce da `docs/` più gli immobili letti da onOffice.
 - `genera.mjs` copia `docs/` in `_site/`, riempie la card `SchedaImmobile`, crea una pagina `immobile-<id>.dc.html` per casa dal modello 2-05, aggiorna la lista 2-04 e le pagine sede 2-08.
 - `onoffice.mjs` legge l'API (solo lettura, firma HMAC v2). Legge solo immobili con `veroeffentlichen = 1` e scarta i venduti.
 - `dati-finti.json` serve quando mancano le chiavi o con `--finti`.
-- `agenti.json` è il profilo pubblico degli agenti, a mano, con chiave l'id utente onOffice. Da onOffice si legge solo quale agente segue la casa.
+- `agenti.json` è il profilo pubblico degli agenti, a mano, con chiave l'id utente onOffice. Da onOffice si legge solo quale agente segue la casa. Per ogni profilo la build crea `agente-<chiave>.dc.html` dal modello 2-09 (le case che segue, i contatti, il modulo "Scrivi all'agente"); le case con un agente che non è in `agenti.json` vanno su `agente-domus.dc.html`. Il pulsante "Apri la sua pagina" della scheda passa `?casa=<titolo>&rif=<codice>#scrivi` e `docs/modulo-agente.js` riempie oggetto e messaggio. Il modulo, come gli altri del sito, per ora porta solo alla pagina di ringraziamento 2-18: non invia ancora niente.
 - `sedi.json` collega il comune alla sede (regola provvisoria).
 
 Comandi:
