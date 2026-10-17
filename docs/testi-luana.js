@@ -44,10 +44,20 @@
     return a;
   }
 
+  // Nome della pagina dall'indirizzo, anche senza ".html" e nella radice del sito.
+  // Le schede e gli articoli generati dalla build usano il Doc del loro modello.
+  function nomePagina() {
+    var nome = decodeURIComponent(location.pathname.split('/').pop() || '');
+    nome = nome.replace(/\.html$/, '').replace(/\.dc$/, '');
+    if (nome === '' || nome === 'index') return '2-01-home';
+    if (/^immobile-/.test(nome) || nome === 'SchedaImmobile') return '2-05-scheda-immobile';
+    if (/^articolo-/.test(nome)) return '2-13-articolo';
+    return nome;
+  }
+
   function monta() {
     if (document.getElementById('testi-luana')) return;
-    var nome = location.pathname.split('/').pop().replace('.dc.html', '');
-    var id = PAGINE[nome];
+    var id = PAGINE[nomePagina()];
     var barra = document.createElement('div');
     barra.id = 'testi-luana';
     barra.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:2147483647;' +
